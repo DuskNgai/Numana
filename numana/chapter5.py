@@ -35,28 +35,28 @@ class NumericalDifferentiation(object):
         """
 
         return (
-            self.twoPointForward(x, h),
-            self.twoPointBackward(x, h),
-            self.threePointCentered(x, h),
-            self.fivePointCentered(x, h),
+            self._twoPointForward(x, h),
+            self._twoPointBackward(x, h),
+            self._threePointCentered(x, h),
+            self._fivePointCentered(x, h),
             sp.diff(self.symbol_f, self.x).subs(self.x, x),
-            self.threePointCenteredSecondOrder(x, h),
+            self._threePointCenteredSecondOrder(x, h),
             sp.diff(self.symbol_f, self.x, 2).subs(self.x, x),
         )
 
-    def twoPointForward(self, x: float, h: float) -> float:
+    def _twoPointForward(self, x: float, h: float) -> float:
         """Two-point forward-difference method."""
         return (self.numeric_f(x + h) - self.numeric_f(x)) / h
 
-    def twoPointBackward(self, x: float, h: float) -> float:
+    def _twoPointBackward(self, x: float, h: float) -> float:
         """Two-point backward-difference method."""
         return (self.numeric_f(x) - self.numeric_f(x - h)) / h
 
-    def threePointCentered(self, x: float, h: float) -> float:
+    def _threePointCentered(self, x: float, h: float) -> float:
         """Three-point centered-difference method."""
         return (self.numeric_f(x + h) - self.numeric_f(x - h)) / (2 * h)
 
-    def fivePointCentered(self, x: float, h: float) -> float:
+    def _fivePointCentered(self, x: float, h: float) -> float:
         """Five-point centered-difference method."""
         return (
             -self.numeric_f(x + 2 * h)
@@ -65,7 +65,7 @@ class NumericalDifferentiation(object):
             + self.numeric_f(x - 2 * h)
         ) / (12 * h)
 
-    def threePointCenteredSecondOrder(self, x: float, h: float) -> float:
+    def _threePointCenteredSecondOrder(self, x: float, h: float) -> float:
         """Three-point centered-difference method for second-order derivative."""
         return (self.numeric_f(x + h) - 2 * self.numeric_f(x) + self.numeric_f(x - h)) / (h * h)
 
@@ -189,7 +189,7 @@ class CompositeNewtonCotes(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
-    def __call__(self, a: float, b: float, m: int) -> Tuple[float, float, float, float]:
+    def __call__(self, a: float, b: float, m: int) -> Tuple[float, float, float, float, float]:
         """
         Evaluate the composite Newton-Cotes methods on the interval [a, b], which is divided into m intervals.
 
@@ -199,8 +199,8 @@ class CompositeNewtonCotes(object):
             m (int): The number of subintervals.
 
         Returns:
-            Tuple[float, float, float, float]: 
-                The results of the first 3 order composite Newton-Cotes methods and the exact result.
+            Tuple[float, float, float, float, float]: 
+                The results of the composite Newton-Cotes methods, in the order of trapezoid, midpoint, 3 midpoints, Simpson's, and the exact result.
         """
 
         assert not (math.isinf(a) or math.isnan(a)), "Invalid interval."
@@ -210,6 +210,7 @@ class CompositeNewtonCotes(object):
         return (
             self._trapezoid(a, b, m),
             self._midpoint(a, b, m),
+            self._threeMidpoints(a, b, m),
             self._simpson(a, b, m),
             sp.integrate(self.symbol_f, (self.x, a, b)),
         )
@@ -228,6 +229,13 @@ class CompositeNewtonCotes(object):
         x = np.linspace(a + h2, b - h2, m)
         y = self.numeric_f(x)
         return np.sum(y) * (b - a) / m
+
+    def _threeMidpoints(self, a: float, b: float, m: int) -> float:
+        """Composite Three Midpoints Rule."""
+        h = (b - a) / m
+        x = np.linspace(a, b, 4 * m + 1)
+        y = self.numeric_f(x)
+        return (2.0 * np.sum(y[1::2]) - np.sum(y[2::4])) * h / 3.0
 
     def _simpson(self, a: float, b: float, m: int) -> float:
         """Composite Simpson's Rule."""

@@ -3,7 +3,7 @@
 ## 5.1 Numerical Differentiation 数值微分
 
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
-    推广中值定理
+    定理 推广中值定理
 </blockquote>
 
 设 $f\in C[a,b]$，$x_1,\dots,x_n\in[a,b]$，$a_1,\dots,a_n>0$，则 $\exist c\in[a,b]$，满足：
@@ -179,17 +179,22 @@ $$
 > &=\frac{-f(x+h)+8f(x+h/2)-8f(x-h/2)+f(x-h)}{6h}
 > \end{align*}
 > $$
-> 
+> 由外推法可知该公式的精度至少是 3 阶。
 
 ## 5.2 Newton-Cotes 公式
 
 ### 5.2.1 Newton-Cotes 公式
 
-利用 $f(x)$ 在节点 $a=x_0<x_1<\cdots<x_n=b$ 处函数值的加权平均来近似代替 $f(\xi)$
+由积分中值定理
+$$
+\int_b^af(x)\mathrm{d}x=f(\xi)(b-a),\xi\in[a,b]
+$$
+利用 $f(x)$ 在节点 $a=x_0<x_1<\cdots<x_n=b$ 处函数值的加权平均来近似代替 $f(\xi)$。
 
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
-    定义 4.1
+    定义 机械求积公式
 </blockquote>
+
 
 $$
 \int_a^bf(x)\mathrm{d}x\approx\sum_{i=0}^{n}A_if(x_i)
@@ -198,8 +203,9 @@ $$
 为机械求积公式，$a=x_0<x_1<\cdots<x_n=b$ 为求积点，$A_i$ 为求积系数。
 
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
-    定义 4.2
+    定义 代数精度
 </blockquote>
+
 
 如果某个求积公式对于次数不超过 $m$ 次的多项式均能精确地成立，而对于次数为 $m+1$ 的多项式不成立，则称该求积公式具有 **$m$ 次代数精度**。
 
@@ -237,7 +243,7 @@ $$
 > \end{bmatrix}
 > $$
 >
-> 则精度 $m=3$：
+> 则精度 $m=3$：yt
 > $$
 > \begin{bmatrix}
 > A_0\\A_1\\A_2
@@ -269,8 +275,9 @@ $$
 > $$
 
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
-    定义 4.3
+    定义 插值型求积公式
 </blockquote>
+
 
 对于给定节点 $a=x_0<x_1<\cdots<x_n=b$，记 $f(x)$ 的 Lagrange 插值多项式为 $L_n(x)$：
 $$
@@ -281,8 +288,8 @@ $$
 \begin{align*}
 I&=\int_{a}^{b}f(x)\mathrm{d}x=\int_{a}^{b}L_n(x)\mathrm{d}x+\int_{a}^{b}R_n(x)\mathrm{d}x\\
 &=\int_{a}^{b}\sum_{i=0}^{n}l_i(x)f(x_i)\mathrm{d}x+\int_{a}^{b}\frac{f^{(n+1)}(\xi)}{(n+1)!}\omega_{n+1}(x)\mathrm{d}x\\
-&=\sum_{i=0}^{n}\int_{a}^{b}l_i(x)\mathrm{d}xf(x_i)+\int_{a}^{b}\frac{f^{(n+1)}(\xi)}{(n+1)!}\omega_{n+1}(x)\mathrm{d}x\\
-&=\sum_{i=0}^{n}A_if(x_i)+\int_{a}^{b}\frac{f^{(n+1)}(\xi)}{(n+1)!}\omega_{n+1}(x)\mathrm{d}x\\
+&=\sum_{i=0}^{n}\int_{a}^{b}l_i(x)\mathrm{d}x\cdot f(x_i)+\int_{a}^{b}\frac{f^{(n+1)}(\xi)}{(n+1)!}\omega_{n+1}(x)\mathrm{d}x\\
+&=\sum_{i=0}^{n}A_if(x_i)+\frac{f^{(n+1)}(\xi)}{(n+1)!}\int_{a}^{b}\omega_{n+1}(x)\mathrm{d}x\\
 \end{align*}
 $$
 *由余项可得，具有 $n+1$ 个节点的插值求积分公式的代数精度至少为 $n$。*
@@ -312,8 +319,9 @@ $$
 > 为 3。
 
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
-    定义 4.4
+    定义 Newton-Cotes 公式
 </blockquote>
+
 
 等距节点下的插值型求积公式称为 Newton-Cotes 公式, 其求积系数称为 Cotes 系数。
 
@@ -321,12 +329,12 @@ $$
 $$
 \begin{align*}
 A_i=\int_{a}^{b}l_i(x)\mathrm{d}x&=\int_{a}^{b}\prod_{j=0,j\ne i}^{n}\left(\frac{x-x_j}{x_i-x_j}\right)\mathrm{d}x\\
-&=\int_{a}^{b}\prod_{j=0,j\ne i}^{n}\left(\frac{x-jh}{ih-jh}\right)\mathrm{d}x\\
-&=\int_{0}^{n}\prod_{j=0,j\ne i}^{n}\left(\frac{t-j}{i-j}\right)h\mathrm{d}t\\
+&=\int_{a}^{b}\prod_{j=0,j\ne i}^{n}\left(\frac{x-a-jh}{ih-jh}\right)\mathrm{d}x\\
+&=\int_{0}^{n}\prod_{j=0,j\ne i}^{n}\left(\frac{t-j}{i-j}\right)h\mathrm{d}t\quad(t=(x-a)/h)\\
 &=\frac{(b-a)}{n}\frac{(-1)^{n-i}}{i!(n-i)!}\int_{0}^{n}\prod_{j=0,j\ne i}^{n}(t-j)\mathrm{d}t\\
 \end{align*}
 $$
-令 
+令
 $$
 \color{red}C^{(n)}_{k}=\frac{(-1)^{n-k}}{k!(n-k)!n}\int_{0}^{n}\prod_{j=0,j\ne k}^{n}(t-j)\mathrm{d}t
 $$
@@ -337,8 +345,9 @@ $$
 3. $\sum_{k=0}^{n}C^{(n)}_{k}=1$
 
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
-    定理 4.1
+    n 阶 Newton-Cotes 公式的代数精度
 </blockquote>
+
 
 对于具有 $n+1$ 个节点的 $n$ 阶 Newton-Cotes 公式, 如果 $n$ 为偶数, 则相应公式的代数精度为 $n+1$；如果 $n$ 为奇数, 则相应求积公式的代数精度为 $n$。
 
@@ -360,8 +369,9 @@ $$
 ### 5.2.2 Newton-Cotes 公式误差分析
 
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
-    梯形法则 n = 1 Cotes 公式
+    梯形法则/n = 1 Cotes 公式
 </blockquote>
+
 
 $$
 C_0^{(1)}=C_1^{(1)}=\frac{1}{2}
@@ -384,8 +394,9 @@ I=\frac{(b-a)}{2}[f(x_0)+f(x_1)]-\frac{f^{(2)}(\xi)}{12}(b-a)^3\quad\xi\in(a,b)
 $$
 
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
-    Simpson公式 n = 2 Cotes 公式
+    Simpson 法则/n = 2 Cotes 公式
 </blockquote>
+
 
 $$
 C_1^{(2)}=-\frac{1}{2}\int_{0}^{2}t(t-2)\mathrm{d}t=\frac{2}{3}\\
@@ -464,7 +475,7 @@ $$
 $$
 误差会增大，数值计算可能不稳定。
 
-### 5.2.4 复合求积公式
+### 5.2.4 Composite Newton-Cotes Formulas 复合求积公式
 
 设将积分区间 $[a, b]$ 划分为 $n$ 等分，小区间用低阶的 Newton-Cotes 公式计算。
 
@@ -491,7 +502,9 @@ R_T[f]&=I-T_n=\sum_{k=0}^{n-1}\left(\int_{x_k}^{x_{k+1}}f(x)\mathrm{d}x-\frac{h}
 $$
 最后一个等号为推广中值定理。
 
-#### 复合中矩形公式
+<blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
+    复合中矩形公式
+</blockquote>
 
 当精度不够时，可以增加节点，减少步长。
 $$
@@ -501,7 +514,7 @@ T_{2n}&=\frac{(b-a)}{2n}[f(a)+f(b)+2\sum_{k=1}^{2n-1}f(x_{\frac{1}{2}k})]\\
 &=\frac{1}{2}T_n+\frac{1}{2}M_n
 \end{align*}
 $$
-称：
+其中
 $$
 M_n=h\sum_{k=0}^{n-1}f(x_{\frac{1}{2}+k})
 $$

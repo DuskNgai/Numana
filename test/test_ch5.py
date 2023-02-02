@@ -14,13 +14,13 @@ class TestNumericalDifferentiation(object):
         nd = ch5.NumericalDifferentiation(f)
         result = nd(x, h)
         print("The function is \033\13331mf(x) = {}\033\1330m and the point is \033\13331mx = {}\033\1330m with increment \033\13331mh = {}\033\1330m.".format(nd.symbol_f, x, h))
-        print("Using two-points forward-difference formula for first-order derivative, the result is: \033\13334m[{}]\033\1330m.".format(result[0]))
-        print("Using two-points backward-difference formula for first-order derivative, the result is: \033\13334m[{}]\033\1330m.".format(result[1]))
-        print("Using three-points centered-difference formula for first-order derivative, the result is: \033\13334m[{}]\033\1330m.".format(result[2]))
-        print("Using five-points centered-difference formula for first-order derivative, the result is: \033\13334m[{}]\033\1330m.".format(result[3]))
-        print("Using symbolic differentiation formula for first-order derivative, the result is: \033\13334m[{}]\033\1330m.".format(result[4]))
+        print("Using two-points forward-difference formula for first-order derivative,     the result is: \033\13334m[{}]\033\1330m.".format(result[0]))
+        print("Using two-points backward-difference formula for first-order derivative,    the result is: \033\13334m[{}]\033\1330m.".format(result[1]))
+        print("Using three-points centered-difference formula for first-order derivative,  the result is: \033\13334m[{}]\033\1330m.".format(result[2]))
+        print("Using five-points centered-difference formula for first-order derivative,   the result is: \033\13334m[{}]\033\1330m.".format(result[3]))
+        print("Using symbolic differentiation formula for first-order derivative,          the result is: \033\13334m[{}]\033\1330m.".format(result[4]))
         print("Using three-points centered-difference formula for second-order derivative, the result is: \033\13334m[{}]\033\1330m.".format(result[5]))
-        print("Using symbolic differentiation formula for second-order derivative, the result is: \033\13334m[{}]\033\1330m.".format(result[6]))
+        print("Using symbolic differentiation formula for second-order derivative,         the result is: \033\13334m[{}]\033\1330m.".format(result[6]))
 
     def testNumericalDifferentiation(self):
         x = sympy.abc.x
@@ -62,10 +62,11 @@ class TestCompositeNewtonCotes(object):
         nc = ch5.CompositeNewtonCotes(f)
         result = nc(a, b, m)
         print("The function is \033\13331mf(x) = {}\033\1330m and the interval is \033\13331m[{}, {}]\033\1330m, we divide the it into \033\13331m[{}]\033\1330m intervals.".format(nc.symbol_f, a, b, m))
-        print("Using \033\13331mComposite Trapezoid Rule\033\1330m, the result is: \033\13334m[{}]\033\1330m.".format(result[0]))
-        print("Using \033\13331mComposite Midpoint  Rule\033\1330m, the result is: \033\13334m[{}]\033\1330m.".format(result[1]))
-        print("Using \033\13331mComposite Simpson's Rule\033\1330m, the result is: \033\13334m[{}]\033\1330m.".format(result[2]))
-        print("Using symbolic integration    , the result is: \033\13334m[{}]\033\1330m.".format(result[-1]))
+        print("Using \033\13331mComposite Trapezoid Rule\033\1330m,       the result is: \033\13334m[{}]\033\1330m.".format(result[0]))
+        print("Using \033\13331mComposite Midpoint  Rule\033\1330m,       the result is: \033\13334m[{}]\033\1330m.".format(result[1]))
+        print("Using \033\13331mComposite Three Midpoints Rule\033\1330m, the result is: \033\13334m[{}]\033\1330m.".format(result[2]))
+        print("Using \033\13331mComposite Simpson's Rule\033\1330m,       the result is: \033\13334m[{}]\033\1330m.".format(result[3]))
+        print("Using symbolic integration,                                the result is: \033\13334m[{}]\033\1330m.".format(result[-1]))
   
     def testCompositeNewtonCotes(self):
         x = sympy.abc.x
@@ -161,8 +162,8 @@ class TestGaussLegendre(object):
         self.outputGaussLegendre(sp.exp(-x ** 2 / 2), -3.0, 3.0)
 
 if __name__ == "__main__":
-    pytest.main(["-s", "test_ch5.py::TestNumericalDifferentiation::testNumericalDifferentiation"])
+    # pytest.main(["-s", "test_ch5.py::TestNumericalDifferentiation::testNumericalDifferentiation"])
     # pytest.main(["-s", "test_ch5.py::TestNewtonCotes::testNewtonCotes"])
-    # pytest.main(["-s", "test_ch5.py::TestCompositeNewtonCotes::testCompositeNewtonCotes"])
+    pytest.main(["-s", "test_ch5.py::TestCompositeNewtonCotes::testCompositeNewtonCotes"])
     # pytest.main(["-s", "test_ch5.py::TestRomberg::testRomberg"])
     # pytest.main(["-s", "test_ch5.py::TestGaussLegendre::testGaussLegendre"])
