@@ -258,7 +258,7 @@ class Romberg(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
-    def __call__(self, a: float, b: float, m: int) -> Tuple[float, float]:
+    def __call__(self, a: float, b: float, m: int) -> Tuple[list[list[float]], float]:
         """
         Evaluate the m order Romberg methods on the interval [a, b].
 
@@ -268,24 +268,25 @@ class Romberg(object):
             m (int): The number of lines.
 
         Returns:
-            Tuple[float, float]: The results of the m order Romberg methods and the exact result.
+            Tuple[list[list[float]], float]: The results of all the m order Romberg method results and the exact result.
         """
 
         assert not (math.isinf(a) or math.isnan(a)), "Invalid interval."
         assert not (math.isinf(b) or math.isnan(b)), "Invalid interval."
         assert m > 0, "Invalid number of lines."
 
-        R = np.zeros((m, m), dtype=float)
-
         h = (b - a) / 2.0
-        R[0, 0] = (self.numeric_f(a) + self.numeric_f(b)) * h
+        y = self.numeric_f(np.linspace(a, b, 2 ** m + 1))
+        R = [[] for _ in range(m)]
+
+        R[0].append((y[0] + y[-1]) * h)
         for i in range(1, m):
-            R[i, 0] = (R[i - 1, 0] / 2.0) + h * np.sum(self.numeric_f(np.linspace(a + h, b - h, 2 ** (i - 1))))
+            R[i].append((R[i - 1][0] / 2.0) + h * np.sum(y[2 ** (m - i)::2 ** (m - i + 1)]))
             for j in range(1, i + 1):
-                R[i, j] = (4 ** j * R[i, j - 1] - R[i - 1, j - 1]) / (4 ** j - 1)
+                R[i].append((4 ** j * R[i][j - 1] - R[i - 1][j - 1]) / (4 ** j - 1))
             h /= 2.0
 
-        return (R[-1, -1], sp.integrate(self.symbol_f, (self.x, a, b)))
+        return (R, sp.integrate(self.symbol_f, (self.x, a, b)))
 
 class GaussLegendre(object):
     """
@@ -296,15 +297,19 @@ class GaussLegendre(object):
     """
 
     ROOT = (
+        (0.0,),
         (-math.sqrt(3.0) / 3.0, math.sqrt(3.0) / 3.0),
         (-math.sqrt(15.0) / 5.0, 0.0, math.sqrt(15.0) / 5.0),
-        (-math.sqrt(525.0 + 70.0 * math.sqrt(30.0)) / 35.0, -math.sqrt(525.0 - 70.0 * math.sqrt(30.0)) / 35.0, math.sqrt(525.0 - 70.0 * math.sqrt(30.0)) / 35.0, math.sqrt(525.0 + 70.0 * math.sqrt(30.0)) / 35.0)
+        (-math.sqrt(525.0 + 70.0 * math.sqrt(30.0)) / 35.0, -math.sqrt(525.0 - 70.0 * math.sqrt(30.0)) / 35.0, math.sqrt(525.0 - 70.0 * math.sqrt(30.0)) / 35.0, math.sqrt(525.0 + 70.0 * math.sqrt(30.0)) / 35.0),
+        (-math.sqrt(8820.0 + 504.0 * math.sqrt(70.0)) / 126.0, -math.sqrt(8820.0 - 504.0 * math.sqrt(70.0)) / 126.0, 0.0, math.sqrt(8820.0 - 504.0 * math.sqrt(70.0)) / 126.0, math.sqrt(8820.0 + 504.0 * math.sqrt(70.0)) / 126.0)
     )
 
     COEFFICIENT = (
+        (2.0,),
         (1.0, 1.0),
         (5.0 / 9.0, 8.0 / 9.0, 5.0 / 9.0),
-        (0.5 - math.sqrt(30.0) / 36.0, 0.5 + math.sqrt(30.0) / 36.0, 0.5 + math.sqrt(30.0) / 36.0, 0.5 - math.sqrt(30.0) / 36.0)
+        (0.5 - math.sqrt(30.0) / 36.0, 0.5 + math.sqrt(30.0) / 36.0, 0.5 + math.sqrt(30.0) / 36.0, 0.5 - math.sqrt(30.0) / 36.0),
+        ((322.0 - 13 * math.sqrt(70)) / 900.0, (322.0 + 13 * math.sqrt(70)) / 900.0, 128.0 / 225.0, (322.0 + 13 * math.sqrt(70)) / 900.0, (322.0 - 13 * math.sqrt(70)) / 900.0)
     )
 
     def __init__(self, f: sp.Function):
@@ -312,7 +317,7 @@ class GaussLegendre(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
-    def __call__(self, a: float, b: float) -> Tuple[float, float, float, float]:
+    def __call__(self, a: float, b: float) -> Tuple[float, float, float, float, float]:
         """
         Evaluate the Gauss-Legendre methods on the interval [a, b].
 
@@ -321,8 +326,8 @@ class GaussLegendre(object):
             b (float): The upper bound of the interval.
 
         Returns:
-            Tuple[float, float, float, float: 
-                The results of the first 3 order Gauss-Legendre methods and the exact result.
+            Tuple[float, float, float, float, float]: 
+                The results of the first 4 order Gauss-Legendre methods and the exact result.
         """
 
         assert not (math.isinf(a) or math.isnan(a)), "Invalid interval."
@@ -332,6 +337,8 @@ class GaussLegendre(object):
             self._solver(a, b, 0),
             self._solver(a, b, 1),
             self._solver(a, b, 2),
+            self._solver(a, b, 3),
+            self._solver(a, b, 4),
             sp.integrate(self.symbol_f, (self.x, a, b)),
         )
 

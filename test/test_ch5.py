@@ -108,7 +108,11 @@ class TestRomberg(object):
         romberg = ch5.Romberg(f)
         result = romberg(a, b, m)
         print("The function is \033\13331mf(x) = {}\033\1330m and the interval is \033\13331m[{}, {}]\033\1330m, line of Romberg table is \033\13331m[{}]\033\1330m.".format(romberg.symbol_f, a, b, m))
-        print("Using \033\13331mRomberg integration\033\1330m , the result is: \033\13334m[{}]\033\1330m.".format(result[0]))
+        print("Using \033\13331mRomberg integration\033\1330m , the result is:")
+        for i in range(m):
+            for j in range(i + 1):
+                print("\033\13334m[{:.16f}]\033\1330m".format(result[0][i][j]), end=" ")
+            print()
         print("Using symbolic integration, the result is: \033\13334m[{}]\033\1330m.".format(result[-1]))
 
     def testRomberg(self):
@@ -137,8 +141,8 @@ class TestGaussLegendre(object):
         gl = ch5.GaussLegendre(f)
         result = gl(a, b)
         print("The function is \033\13331mf(x) = {}\033\1330m and the interval is \033\13331m[{}, {}]\033\1330m.".format(gl.symbol_f, a, b))
-        for i in range(3):
-            print("Using \033\13331m{0}\033\1330m order Gauss-Legendre formula, the result is: \033\13334m[{1}]\033\1330m.".format(i + 2, result[i]))
+        for i in range(5):
+            print("Using \033\13331m{0}\033\1330m order Gauss-Legendre formula, the result is: \033\13334m[{1}]\033\1330m.".format(i + 1, result[i]))
         print("Using symbolic integration, the result is: \033\13334m[{}]\033\1330m.".format(result[-1]))
 
     def testGaussLegendre(self):
@@ -164,6 +168,6 @@ class TestGaussLegendre(object):
 if __name__ == "__main__":
     # pytest.main(["-s", "test_ch5.py::TestNumericalDifferentiation::testNumericalDifferentiation"])
     # pytest.main(["-s", "test_ch5.py::TestNewtonCotes::testNewtonCotes"])
-    pytest.main(["-s", "test_ch5.py::TestCompositeNewtonCotes::testCompositeNewtonCotes"])
+    # pytest.main(["-s", "test_ch5.py::TestCompositeNewtonCotes::testCompositeNewtonCotes"])
     # pytest.main(["-s", "test_ch5.py::TestRomberg::testRomberg"])
-    # pytest.main(["-s", "test_ch5.py::TestGaussLegendre::testGaussLegendre"])
+    pytest.main(["-s", "test_ch5.py::TestGaussLegendre::testGaussLegendre"])

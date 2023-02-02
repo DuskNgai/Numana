@@ -135,8 +135,6 @@ $$
 <blockquote style="border-left: 5px solid #b94263; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(185, 66, 110, 0.1)">
     例题
 </blockquote>
-
-
 设 $I(h)$ 逼近 $I$ 的余项为:
 $$
 I-I(h)=\alpha_1h^2+\alpha_2h^4+\cdots
@@ -347,8 +345,6 @@ $$
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
     n 阶 Newton-Cotes 公式的代数精度
 </blockquote>
-
-
 对于具有 $n+1$ 个节点的 $n$ 阶 Newton-Cotes 公式, 如果 $n$ 为偶数, 则相应公式的代数精度为 $n+1$；如果 $n$ 为奇数, 则相应求积公式的代数精度为 $n$。
 
 > 取 $f(x)=x^{n+1}$​，则
@@ -371,8 +367,6 @@ $$
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
     梯形法则/n = 1 Cotes 公式
 </blockquote>
-
-
 $$
 C_0^{(1)}=C_1^{(1)}=\frac{1}{2}
 $$
@@ -396,8 +390,6 @@ $$
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
     Simpson 法则/n = 2 Cotes 公式
 </blockquote>
-
-
 $$
 C_1^{(2)}=-\frac{1}{2}\int_{0}^{2}t(t-2)\mathrm{d}t=\frac{2}{3}\\
 C_0^{(2)}=C_2^{(2)}=\frac{1}{2}\left(1-\frac{2}{3}\right)=\frac{1}{6}
@@ -487,7 +479,7 @@ $$
 $$
 \begin{align*}
 I&=\int_a^bf(x)\mathrm{d}x=\sum_{k=0}^{n-1}\int_{x_k}^{x_{k+1}}f(x)\mathrm{d}x\\
-&\approx T_n=\sum_{k=0}^{n-1}\frac{h}{2}[f(x_k)+f(x_{k+1})]\\
+&=T_n\approx\sum_{k=0}^{n-1}\frac{h}{2}[f(x_k)+f(x_{k+1})]\\
 &=\frac{h}{2}[f(a)+f(b)+2\sum_{k=1}^{n-1}f(x_k)]\\
 &=\frac{b-a}{n}[f(a)+f(b)+2\sum_{k=1}^{n-1}f(x_k)]
 \end{align*}

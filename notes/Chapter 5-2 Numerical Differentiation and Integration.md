@@ -10,7 +10,7 @@
 
 设 $f(x)\in C^{2m+2}[a,b]$，则复合梯形公式：
 $$
-T(h)=I(f)+\sum_{k=1}^{n}d_kh^{2k}+d_{n+1}(h)h^{2n+2}
+T(h)=I(f)+\sum_{k=1}^{m}d_kh^{2k}+d_{md+1}(h)h^{2m+2}
 $$
 其中：$T(h)=T_n$，$I(f)=\int_a^bf(x)\mathrm{d}x,d_j(j\in\{1,\dots,n\})$ 为与 $h$ 无关的常数，$d_{n+1}(h)$ 为 $h$ 的函数。
 
@@ -30,12 +30,24 @@ T_i^1=\frac{4T_i^0-T_{i-1}^0}{4-1}
 $$
 Romberg 算法的递推表：
 $$
-\begin{gather*}
-T_0^0=[f(a)+f(b)]\frac{h}{2}\quad h=b-a\\
-T_i^0=\frac{1}{2}T_{i-1}^0+\frac{h}{2^i}\sum_{k=0}^{i-1}f(x_{k+\frac{1}{2}})\\
-T_i^j=\frac{4^jT_{i}^{j-1}-T_{i-1}^{j-1}}{4^j-1}
-\end{gather*}
+\begin{matrix}
+T_0^0\\
+T_1^0&T_1^1\\
+T_2^0&T_2^1&T_2^2\\
+\vdots&\ddots&\ddots&\ddots\\
+T_n^0&T_n^1&\cdots&\cdots&T_n^n
+\end{matrix}
 $$
+其中：
+$$
+\begin{align*}
+T_0^0&=[f(a)+f(b)]\frac{h}{2}\quad(h=b-a)\\
+T_i^0&=\frac{1}{2}T_{i-1}^0+\frac{h}{2^i}\sum_{k=0}^{i-1}f\left(x_{k+\frac{1}{2}}\right)\\
+T_i^j&=\frac{4^jT_{i}^{j-1}-T_{i-1}^{j-1}}{4^j-1}
+\end{align*}
+$$
+
+第二个式子的作用是采样，第三个式子的作用是外推
 
 ## 5.5 Gauss 积分
 
