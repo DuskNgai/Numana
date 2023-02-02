@@ -1,0 +1,477 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2021
+
+% ready for submission
+\usepackage[final]{neurips_2021}
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+%     \usepackage[preprint]{neurips_2021}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_2021}
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_2021}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage[mathscr]{euscript}
+\usepackage{graphicx}
+\usepackage{xeCJK}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\title{数值分析数值试验二}
+\author{戴海钊\quad 2019533084}
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+\lstset{
+    basicstyle=\tiny\tt,
+    keywordstyle=\color{purple}\bfseries,
+    identifierstyle=\color{brown!80!black},
+    commentstyle=\color{gray},
+    showstringspaces=false,
+}
+
+
+\begin{document}
+
+\maketitle
+
+\section{数值试验的目的}
+\begin{enumerate}
+    \item 体会数值方法的不稳定性对数值结果的影响。
+    \item 体会算法的保结构性。
+    \item 体会非线性方程的迭代求解。
+\end{enumerate}
+
+\section{问题的提出}
+\subsection{试验一}
+分别用显式与隐式欧拉法求解 $y'=-50y,y(0)=100$。
+\begin{enumerate}
+    \item 取 $h=0.05,0.04,0.03,\dots$，用显式欧拉法求解，当步长 $h$ 取到多少时，数值解开始出现不稳定？
+    \item 用隐式欧拉法求解上述问题，数值解会出现不稳定吗？
+\end{enumerate}
+
+\subsection{试验二}
+对一阶常微分方程组
+\begin{equation}
+    \begin{cases}
+        y'(t)=-2x(t)\\
+        x'(t)=\dfrac{9}{2}y(t)\\
+        x(0)=3, y(0)=2
+    \end{cases}
+\end{equation}
+分别用梯形法、Euler 法，四阶 Runge-Kutta 法求解其数值解，并观察相平面中的轨迹。
+哪些方法求得的结果能保持相平面中轨迹不变。
+
+\subsection{试验三}
+单摆问题
+\begin{equation}
+    \begin{cases}
+        \dfrac{\mathrm{d}^2\theta(t)}{\mathrm{d}t^2}+\sin\theta=0&0<t\le10\\
+        \theta(0)=\dfrac{\pi}{3}\\
+        \dfrac{\mathrm{d}\theta(t)}{\mathrm{d}t}\bigg|_{t = 0}=-\dfrac{1}{2}
+    \end{cases}
+\end{equation}
+将上述二阶方程化为一阶方程组，并用隐式欧拉公式和梯形公式求解，取步长 $h=0.02$。
+
+\section{数值试验的结果}
+\subsection{试验一}
+\subsubsection{显式欧拉法}
+用显式欧拉法，得到的迭代格式为：
+\begin{equation*}
+    y_{n + 1} = y_{n} + hf(x_{n}, y_{n}) = (1 - 50h)y_{n}
+\end{equation*}
+因此误差公式为：
+\begin{equation*}
+    |\epsilon_{n + 1}| = |1 - 50h||\epsilon_{n}|
+\end{equation*}
+当：
+\begin{equation*}
+    |1 - 50h| < 1
+\end{equation*}
+即：
+\begin{equation*}
+    0 < h < 0.04
+\end{equation*}
+时候，数值解稳定。
+
+\subsubsection{显式欧拉法数值试验结果}
+\begin{figure*}[h]
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q11_h_0.01.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q11_h_0.02.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q11_h_0.03.png}
+    \end{subfigure}
+    \caption{显式欧拉法数值稳定的步长所对应的图像。}
+    \label{fig:explicit-convergence}
+\end{figure*}
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q11_h_0.04.png}
+    \end{subfigure}
+    \centering
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q11_h_0.05.png}
+    \end{subfigure}
+    \caption{显式欧拉法数值不稳定的步长所对应的图像。}
+    \label{fig:explicit-divergence}
+\end{figure*}
+
+\subsubsection{隐式欧拉法}
+用隐式欧拉法，得到的迭代格式为：
+\begin{equation*}
+    y_{n + 1} = y_{n} + hf(x_{n+1}, y_{n+1}) = y_{n} - 50hy_{n+1}
+\end{equation*}
+即：
+\begin{equation*}
+    y_{n + 1} = \frac{1}{1 + 50h} y_{n}
+\end{equation*}
+因此误差公式为：
+\begin{equation*}
+    |\epsilon_{n + 1}| = \left|\frac{1}{1 + 50h}\right||\epsilon_{n}|
+\end{equation*}
+由于当 $h > 0$，时候：
+\begin{equation*}
+    \left|\frac{1}{1 + 50h}\right| < 1
+\end{equation*}
+即隐式欧拉法无条件数值解稳定。
+
+如果使用迭代格式：
+\begin{equation*}
+    y_{n + 1}^{[k + 1]} = y_{n} + hf(x_{n + 1}, y_{n + 1}^{[k]}) = y_{n} - 50hy_{n + 1}^{[k]}
+\end{equation*}
+由于：
+\begin{equation*}
+    \begin{aligned}
+        \left|y_{n + 1}^{[k + 1]} - y_{n + 1}^{[k]}\right|&=h\left|f(x_{n + 1}, y_{n + 1}^{[k]}) - f(x_{n + 1}, y_{n + 1}^{[k - 1]})\right|\\
+        &=50h\left|y_{n + 1}^{[k]} - y_{n + 1}^{[k - 1]}\right|\\
+        &=(50h)^k\left|y_{n + 1}^{[1]} - y_{n + 1}^{[0]}\right|\\
+    \end{aligned}
+\end{equation*}
+因此，当 $0<h<0.02$ 时，迭代收敛。
+
+\subsubsection{隐式欧拉法数值试验结果}
+\begin{figure*}[h]
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.01_precise.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.02_precise.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.03_precise.png}
+    \end{subfigure}
+    \centering
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.04_precise.png}
+    \end{subfigure}
+    \centering
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.05_precise.png}
+    \end{subfigure}
+    \caption{提前求解隐式欧拉法的计算公式所得到的图像。}
+    \label{fig:implicit-precalculated}
+\end{figure*}
+
+
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.01.png}
+    \end{subfigure}
+    \centering
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.02.png}
+    \end{subfigure}
+    \caption{迭代求解隐式欧拉法的计算公式所得到的收敛图像。}
+    \label{fig:implicit-convergence}
+\end{figure*}
+\begin{figure*}[h]
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.03.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.04.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q12_h_0.05.png}
+    \end{subfigure}
+    \caption{迭代求解隐式欧拉法的计算公式所得到的发散图像。}
+    \label{fig:implicit-divergence}
+\end{figure*}
+
+\subsection{试验二}
+\subsubsection{梯形法}
+化为梯形形式：
+\begin{equation*}
+    \begin{aligned}
+        x_{n+1}&=x_{n}+\frac{h}{2}\left(\frac{9}{2}y_{n}+\frac{9}{2}y_{n+1}\right)\\
+        y_{n+1}&=y_{n}+\frac{h}{2}(-2x_{n}-2x_{n+1})\\
+    \end{aligned}
+\end{equation*}
+即：
+\begin{equation*}
+    \begin{aligned}
+        x_{n+1}-x_{n}&=\frac{9h}{4}(y_{n}+y_{n+1})\\
+        y_{n+1}-y_{n}&=-h(x_{n}+x_{n+1})\\
+    \end{aligned}
+\end{equation*}
+配凑得到：
+\begin{equation*}
+    \begin{aligned}
+        (x_{n+1}^2-x_{n}^2)&=\frac{9h}{4}(y_{n}+y_{n+1})(x_{n}+x_{n+1})\\
+        \frac{9}{4}(y_{n+1}^2-y_{n}^2)&=-\frac{9}{4}h(x_{n}+x_{n+1})(y_{n}+y_{n+1})\\
+    \end{aligned}
+\end{equation*}
+相加得到：
+\begin{equation*}
+    x_{n+1}^2+\frac{9}{4}y_{n+1}^2=x_{n}^2+\frac{9}{4}y_{n}^2=x_{0}^2+\frac{9h}{4}y_{0}^2=18
+\end{equation*}
+
+\subsubsection{Euler 法}
+\textbf{显式欧拉法}
+\begin{equation*}
+    \begin{aligned}
+        x_{n+1}&=x_{n}+\frac{9}{2}hy_{n}\\
+        y_{n+1}&=y_{n}-2hx_{n}\\
+    \end{aligned}
+\end{equation*}
+即：
+\begin{equation*}
+    \begin{aligned}
+        x_{n+1}-x_{n}&=\frac{9}{2}hy_{n}\\
+        y_{n+1}-y_{n}&=-2hx_{n}\\
+    \end{aligned}
+\end{equation*}
+配凑得到：
+\begin{equation*}
+    \begin{aligned}
+        (x_{n+1}^2-x_{n}^2)&=\frac{9}{2}hy_{n}(x_{n}+x_{n+1})\\
+        \frac{9}{4}(y_{n+1}^2-y_{n}^2)&=-\frac{9}{2}hx_{n}(y_{n}+y_{n+1})\\
+    \end{aligned}
+\end{equation*}
+相加得到：
+\begin{equation*}
+    x_{n+1}^2+\frac{9}{4}y_{n+1}^2=x_{n}^2+\frac{9}{4}y_{n}^2+\frac{9}{2}h(x_{n+1}y_{n}-x_{n}y_{n+1})
+\end{equation*}
+
+\textbf{隐式欧拉法}
+\begin{equation*}
+    \begin{aligned}
+        x_{n+1}&=x_{n}+\frac{9}{2}hy_{n+1}\\
+        y_{n+1}&=y_{n}-2hx_{n+1}\\
+    \end{aligned}
+\end{equation*}
+即：
+\begin{equation*}
+    \begin{aligned}
+        x_{n+1}-x_{n}&=\frac{9}{2}hy_{n+1}\\
+        y_{n+1}-y_{n}&=-2hx_{n+1}\\
+    \end{aligned}
+\end{equation*}
+配凑得到：
+\begin{equation*}
+    \begin{aligned}
+        (x_{n+1}^2-x_{n}^2)&=\frac{9}{2}hy_{n+1}(x_{n}+x_{n+1})\\
+        \frac{9}{4}(y_{n+1}^2-y_{n}^2)&=-\frac{9}{2}hx_{n+1}(y_{n}+y_{n+1})\\
+    \end{aligned}
+\end{equation*}
+相加得到：
+\begin{equation*}
+    x_{n+1}^2+\frac{9}{4}y_{n+1}^2=x_{n}^2+\frac{9}{4}y_{n}^2+\frac{9}{2}h(x_{n}y_{n+1}-x_{n+1}y_{n})
+\end{equation*}
+理论上，欧拉法不能保证解仍然维持在相平面上。
+
+\subsubsection{梯形法、欧拉法数值试验结果}
+\begin{figure*}[h]
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q21_trapezoid_h_0.001.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q21_trapezoid_h_0.010.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q21_trapezoid_h_0.100.png}
+    \end{subfigure}
+    
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q22_explicit_h_0.001.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q22_explicit_h_0.010.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q22_explicit_h_0.100.png}
+    \end{subfigure}
+    
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q23_implicit_h_0.001.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q23_implicit_h_0.010.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q23_implicit_h_0.100.png}
+    \end{subfigure}
+    \caption{梯形法、欧拉法求解常微分方程组的数值试验结果。}
+    \label{fig:phase-plane}
+\end{figure*}
+
+\subsubsection{四阶 Runge-Kutta 法}
+四阶 Runge-Kutta 分析过于复杂，这里只给出最终的结果。
+\begin{figure*}[h]
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q24_rk4_h_0.001.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q24_rk4_h_0.010.png}
+    \end{subfigure}
+    \begin{subfigure}[h]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q24_rk4_h_0.100.png}
+    \end{subfigure}
+    \caption{四阶 Runge-Kutta 法得到的轨迹，几乎与精确解重合。}
+    \label{fig:Runge-Kutta}
+\end{figure*}
+    
+\subsection{试验三}
+改写
+\begin{equation*}
+    \begin{cases}
+        0<t\le10\\
+        y_1 = \theta\\
+        y_2 = \dot{\theta}\\
+        y_3 = \ddot{\theta}\\
+    \end{cases}\Rightarrow
+    \begin{cases}
+        y_1'=y_2\\
+        y_2'=y_3\\
+        y_3=-\sin y_1\\
+        y_1(0)=\dfrac{\pi}{3},y_2(0)=-\dfrac{1}{2}
+    \end{cases}\Rightarrow
+    \begin{cases}
+        y_1'=y_2\\
+        y_2'=-\sin y_1\\
+    \end{cases}
+\end{equation*}
+
+\subsubsection{隐式欧拉法}
+\begin{equation*}
+    \begin{aligned}
+        y_{1,n+1}&=y_{1,n}+hy_{2,n+1}\\
+        y_{2,n+1}&=y_{2,n}-h\sin y_{1,n+1}\\
+    \end{aligned}
+\end{equation*}
+
+\subsubsection{梯形法}
+\begin{equation*}
+    \begin{aligned}
+        y_{1,n+1}&=y_{1,n}+\frac{h}{2}(y_{2,n}+y_{2,n+1})\\
+        y_{2,n+1}&=y_{2,n}-\frac{h}{2}(\sin y_{1,n}+\sin y_{1,n+1})\\
+    \end{aligned}
+\end{equation*}
+
+这里我们仍然可以沿用之前的代码。
+
+\subsubsection{结果}
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}[h]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q31_h_0.02.png}
+    \end{subfigure}
+    \centering
+    \begin{subfigure}[h]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/Q32_h_0.02.png}
+    \end{subfigure}
+    \caption{用隐式欧拉法和梯形法对高阶常微分方程进行求解得到的图像。用四阶 Runge-Kutta 法进行验证（右）。}
+    \label{fig:system}
+\end{figure*}
+
+
+\section{分析和总结}
+\subsection{试验一}
+试验一中，我们使用了显式欧拉法和隐式欧拉法对于同一个常微分方程初值问题进行求解。
+有如下发现：
+\begin{enumerate}
+    \item 对于显式欧拉法，步长没有超过阈值时候，步长越小收敛越快；步长超过了阈值后就会发散。当步长刚好为阈值时，所得的数值解会在两个数之间震荡。见图\ref{fig:explicit-convergence}、图\ref{fig:explicit-divergence}。
+    \item 对于隐式欧拉法，如果使用了求解好的前后项关系，那么这种方法是无条件收敛的，且收敛时候的数值总是大于等于精确值，步长越小，差距越小。见图\ref{fig:implicit-precalculated}。
+    \item 对于隐式欧拉法，如果使用迭代方法求解，那么超过某个理论阈值后，隐式欧拉法会快速发散。见图\ref{fig:implicit-convergence}、图\ref{fig:implicit-divergence}。
+\end{enumerate}
+
+\subsection{试验二}
+试验二中，我们分别用梯形法、Euler 法，四阶 Runge-Kutta 法求解同一个常微分方程组。
+有如下发现：
+\begin{enumerate}
+    \item 欧拉法无法保证相平面中的轨迹不偏移，且可以发现，显式欧拉法解得的轨迹偏向于向外偏移；隐式欧拉法解得的轨迹偏向于向内偏移。见图\ref{fig:phase-plane}。
+    \item 梯形法和四阶 Runge-Kutta 法在步长足够小的时候可以使得轨迹维持在相平面上；在步长较大时候因为数值误差仍然会偏移。但 Runge-Kutta 法收敛性比梯形法好很多。见图\ref{fig:phase-plane}、图\ref{fig:Runge-Kutta}。
+\end{enumerate}
+
+\subsection{试验三}
+试验三中，我们分别用隐式欧拉公式和梯形公式求解求解同一个常微分方程组，步长为 $0.02$。
+有如下发现：
+\begin{enumerate}
+    \item 由于隐式欧拉法是一阶方法，收敛的速度不如二阶的梯形法。因此在与四阶 Runge-Kutta 法进行比较时候，可以发现梯形法已经收敛，但隐式欧拉法仍未。见图\ref{fig:system}。
+\end{enumerate}
+
+\section{程序}
+ode.py
+\lstinputlisting[language=Python]{code/ode.py}
+
+solution.py
+\lstinputlisting[language=Python]{code/solution.py}
+
+\end{document}

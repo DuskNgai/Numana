@@ -1,0 +1,219 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2021
+
+% ready for submission
+\usepackage[final]{neurips_2021}
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+%     \usepackage[preprint]{neurips_2021}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_2021}
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_2021}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage[mathscr]{euscript}
+\usepackage{graphicx}
+\usepackage{xeCJK}
+\usepackage{float}
+\usepackage{listings}
+\title{数值分析数值试验一}
+\author{戴海钊\quad 2019533084}
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+\lstset{
+    basicstyle=\tiny\tt,
+    keywordstyle=\color{purple}\bfseries,
+    identifierstyle=\color{brown!80!black},
+    commentstyle=\color{gray},
+    showstringspaces=false,
+}
+
+
+\begin{document}
+
+\maketitle
+
+\section{数值试验的目的}
+\begin{enumerate}
+    \item 比较 Jacobi 迭代法，Gauss-Seidel 迭代法，SOR 迭代法的性能，即迭代次数和迭代误差。
+    \item 寻找影响迭代法解的误差的原因，如迭代方法和步长。
+    \item 比较预期迭代次数和实际迭代次数。
+    \item 探求 $\omega$ 对于 SOR 迭代法的影响。
+\end{enumerate}
+
+\section{问题的提出}
+考虑矩形区域上的泊松问题：
+\begin{equation}
+    \begin{cases}
+        -\left\{\dfrac{\partial^2u}{\partial x^2}+\dfrac{\partial^2u}{\partial y^2}\right\}=f(x,y)&0<x,y<1\\
+        u(0,y)=u(1,y)=u(x,0)=u(x,1)=0
+    \end{cases}\label{eq:Poisson}
+\end{equation}
+取\eqref{eq:Poisson}中右端项为 $f(x,y)=2\pi^2\sin(\pi x)\sin(\pi y)$，则\eqref{eq:Poisson}的精确解为
+\begin{equation*}
+    u^*(x,y)=\sin(\pi x)\sin(\pi y)
+\end{equation*}
+令 $h=\dfrac{1}{N}$，$N$ 为正整数，$x_i=ih,y_j=jh,u_{i,j}\approx u(x_i,y_j),f_{ij}=f(x_i,y_j)$
+\begin{equation*}
+    \begin{aligned}
+        \frac{\partial^2u}{\partial x^2}\bigg|_{x=x_i,y=y_i}=\frac{u_{i+1,j}-2u_{i,j}+u_{i-1,j}}{h^2}\\
+        \frac{\partial^2u}{\partial y^2}\bigg|_{x=x_i,y=y_i}=\frac{u_{i,j+1}-2u_{i,j}+u_{i,j-1}}{h^2}\\
+    \end{aligned}
+\end{equation*}
+则求解\eqref{eq:Poisson}的差分格式为
+\begin{equation}
+    \begin{cases}
+        -u_{i-1,j}-u_{i,j-1}+4u_{i,j}-u_{i+1,j}-u_{i,j+1}=h^2f_{i,j}\\
+        u_{i,0}=u_{0,j}=u_{i,N}=u_{N,j}=0\quad i, j\in\{1,2,\dots,N-1\}
+    \end{cases}\label{eq:Descrete}
+\end{equation}
+记
+\begin{equation*}
+    u^h_j=\begin{bmatrix}u_{1,j}\\u_{2,j}\\\vdots\\u_{N-1,j}\end{bmatrix}\quad
+    f^h_j=\begin{bmatrix}f_{1,j}\\f_{2,j}\\\vdots\\f_{N-1,j}\end{bmatrix}\quad
+    u^h=\begin{bmatrix}u^h_1\\u^h_2\\\vdots\\u^h_{N-1}\end{bmatrix}\quad
+    f^h=\begin{bmatrix}f^h_1\\f^h_2\\\vdots\\f^h_{N-1}\end{bmatrix}
+\end{equation*}
+则\eqref{eq:Descrete}可表示为线性代数方程组：
+\begin{equation}
+    L_hu^h=h^2f^h\label{eq:Matrix}
+\end{equation}
+其中
+\begin{equation*}
+    C=\begin{bmatrix}
+        0&1& & & & \\
+        1&0&1& & & \\
+         &1&0&1& & \\
+         & &\ddots&\ddots&\ddots& \\
+         & & &1&0&1\\
+         & & & &1&0
+    \end{bmatrix}_{(N-1)\times(N-1)}\quad
+    L_h=\begin{bmatrix}
+        4I-C&-I& & \\
+        -I&4I-C&-I& & \\
+         &\ddots&\ddots&\ddots& \\
+         & &-I&4I-C&-I\\
+         & & &-I&4I-C
+    \end{bmatrix}
+\end{equation*}
+
+\section{数值试验的结果}
+\subsection{试验一}
+取 $h=0.1$，分别用不同迭代法求解方程组\eqref{eq:Matrix}，
+求出使 $\|u^{(k+1)}-u^{(k)}\|_{\infty}<\epsilon$ 的近似解及相应的迭代次数，
+并计算 $\|u^{(k+1)}-u^{*}\|_{\infty}$ （即，精确解与近似解的误差）。
+取 $\epsilon=10^{-6}$，迭代法为：
+（1）Jacobi 迭代法；（2）Gauss-Seidel 迭代法；（3）SOR 迭代法，$\omega=1.2,1.3,1.9,0.9$。
+
+\subsubsection{结果}
+\begin{center}
+    \begin{table}[H]
+        \caption{数值试验一结果}
+        \begin{tabular}{|c|c|c|c|c|c|c|c|}
+        \hline
+        迭代方法           & 谱半径  & 收敛速度 & $\|u^{(1)}-u^{(0)}\|$ & 预期次数 & 实际次数 & 误差       \\ \hline
+        Jacobi            & 0.9511 & 0.05018 & 4.9348$\times$10$^{-2}$ & 276      & 216      & 8.2466$\times$10$^{-3}$ \\ \hline
+        Gauss-Seidel      & 0.9045 & 0.1004  & 9.0405$\times$10$^{-2}$ & 138      & 115      & 8.2563$\times$10$^{-3}$ \\ \hline
+        SOR $\omega$=0.9  & 0.9218 & 0.08142 & 7.5503$\times$10$^{-2}$ & 170      & 139      & 8.2539$\times$10$^{-3}$ \\ \hline
+        SOR $\omega$=1.2  & 0.8557 & 0.1558  & 1.3093$\times$10$^{-1}$ & 89       & 78       & 8.2605$\times$10$^{-3}$ \\ \hline
+        SOR $\omega$=1.3  & 0.8187 & 0.2001  & 1.5807$\times$10$^{-1}$ & 69       & 62       & 8.2615$\times$10$^{-3}$ \\ \hline
+        SOR $\omega$=1.9  & 0.9000 & 0.1054  & 5.6909$\times$10$^{-1}$ & 148      & 125      & 8.2663$\times$10$^{-3}$ \\ \hline
+        % SOR          & 1.527864045 & 0.527864569 & 0.638915527 & 0.24404918    & 21         & 27         & 0.08264986 \\ \hline
+        \end{tabular}
+    \end{table}
+\end{center}
+设迭代格式为：
+\begin{equation*}
+    u^{(k+1)}=Bu^{(k)}+f
+\end{equation*}
+
+其中，谱半径 $\rho(B)$ 为 $B$ 绝对值最大的特征值；
+收敛速度 $R(B)=-\ln\rho(B)$；
+$u^{(0)}$ 为全零向量，因此 $u^{(1)}$ 就是 $f$；
+预期迭代次数 $k$ 运用了如下公式：
+\begin{equation*}
+    k=\left\lceil\ln\left(\frac{\epsilon(1-\rho(B))}{\|u^{(1)}-u^{(0)}\|}\right)/\ln(\rho(B))\right\rceil
+\end{equation*}
+误差为 $\|u^{(k+1)}-u^{*}\|_{\infty}$。
+其他参数为 $h=0.1,\epsilon=10^{-6}$。
+
+\subsection{试验二}
+用 Jacobi 迭代法，取不同的步长 $h=0.1,0.05,0.02,0.01$ 求解方程\eqref{eq:Matrix}，
+求出使 $\|u^{(k+1)}-u^{(k)}\|_{\infty}<\epsilon$ 的近似解及相应的迭代次数。
+已知 Jacobi 迭代矩阵为
+\begin{equation*}
+    J = I - \frac{1}{4}L_h
+\end{equation*}
+其谱半径为
+\begin{equation*}
+    \rho(J) = 1 - 2\sin^2\frac{\pi h}{2}\approx1-\frac{\pi^2h^2}{2}
+\end{equation*}
+
+\subsubsection{结果}
+\begin{center}
+    \begin{table}[H]
+        \caption{数值试验二结果}
+        \begin{tabular}{|c|c|c|c|c|c|c|c|}
+        \hline
+        $h$  & 谱半径  & 收敛速度                 & $\|u^{(1)}-u^{(0)}\|$ & 预期次数 & 实际次数 & 误差      \\ \hline
+        0.1  & 0.9511 & 5.0181$\times$10$^{-2}$ & 4.9348$\times$10$^{-2}$ & 276     & 216    & 8.2466$\times$10$^{-3}$ \\ \hline
+        0.05 & 0.9877 & 1.2388$\times$10$^{-2}$ & 1.2337$\times$10$^{-2}$ & 1116    & 761    & 1.9790$\times$10$^{-3}$ \\ \hline
+        0.02 & 0.9980 & 1.9752$\times$10$^{-3}$ & 1.9739$\times$10$^{-3}$ & 6995    & 3842   & 1.7620$\times$10$^{-4}$ \\ \hline
+        0.01 & 0.9995 & 4.9356$\times$10$^{-4}$ & 4.9348$\times$10$^{-4}$ & 27992   & 12565  & 1.9431$\times$10$^{-3}$ \\ \hline
+        \end{tabular}
+    \end{table}
+\end{center}
+参数含义和试验一相同。$\epsilon=10^{-6}$。
+
+\section{分析和总结}
+\subsection{试验一}
+试验一中，我们使用了 Jacobi 迭代法，Gauss-Seidel 迭代法，SOR 迭代法对于同一个线性方程组进行求解。
+有如下发现：
+\begin{enumerate}
+    \item 通过公式得到的预期迭代次数通常大于实际迭代次数，这是由于预期迭代次数是通过不等式放缩而来，是实际迭代次数的一个上界。
+    \item Jacobi 迭代法的实际迭代次数大约且小于 Gauss-Seidel 迭代法的实际迭代次数的 2 倍。
+    \item 线性方程组的矩阵对角线为正数，非对角线非正，此次迭代使得 $0<\rho(G)<\rho(J)<1$ 成立。
+    \item 由公式 $\omega^*=2/(1+\sqrt{1-\rho(J)^2})$ 可以得到 SOR 迭代法的最佳松弛因子为 $1.5279$，此时实际迭代次数为 27 次，谱半径为 $0.5279$。
+          将 Gauss-Seidel 迭代法看作 $\omega=1$ 的特例。可以看到，$\omega$ 越接近最佳松弛因子，迭代矩阵的谱半径就越小，收敛速度就越快，实际收敛次数就越小。
+    \item 各种迭代法产生的解和真实的解的误差都大约为 $8.25\times10^{-3}$。则误差与迭代方法可能无关。
+\end{enumerate}
+
+\subsection{试验二}
+试验二中，我们使用 Jacobi 迭代法，并且使用不同的步长 $h$ 对于同一个线性方程组进行求解。
+有如下发现：
+\begin{enumerate}
+    \item $h$ 越小，矩形区域划分越小，Jacobi 迭代矩阵的谱半径就越大，收敛速度就越慢，实际迭代次数就越大。
+          但是预期迭代次数的增长幅度更大，使得实际迭代次数和预期迭代次数的比值变小。
+    \item 可以看到，$h$ 的变化引起了误差的变化，$h$ 越小，误差通常越小，但并非完全正相关。
+\end{enumerate}
+
+\section{程序}
+poisson.py
+\lstinputlisting[language=Python]{code/poisson.py}
+
+solution.py
+\lstinputlisting[language=Python]{code/solution.py}
+
+\end{document}

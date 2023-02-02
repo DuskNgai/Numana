@@ -1,0 +1,13 @@
+__pycache__
+.pytest_cache
+.vscode
+
+figure
+*.pdf
+
+*sty
+*.xlsx
+*.aux
+*.log
+*.out
+*.gz
