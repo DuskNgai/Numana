@@ -19,19 +19,17 @@ $$
 I_h(x)=\frac{x-x_{j+1}}{x_j-x_{j+1}}y_j+\frac{x-x_j}{x_{j+1}-x_j}y_{j+1}\quad x\in[x_j,x_{j+1}]
 $$
 利用基函数可写为 $I_h(x)=\sum_{j=0}^{n}y_jI_j(x)$，其中：
-$$\begin{gather*}
+$$
 l_0(x)=\frac{x-x_1}{x_0-x_1}\quad x\in[x_0,x_{1}]\\
 l_j(x)=\begin{cases}\dfrac{x-x_{j-1}}{x_j-x_{j-1}}\quad x\in[x_{j-1},x_{j}]\\
 \dfrac{x-x_{j+1}}{x_j-x_{j+1}}\quad x\in[x_{j},x_{j+1}]\\
 \end{cases}\\
 l_n(x)=\frac{x-x_{n-1}}{x_n-x_{n-1}}\quad x\in[x_{n-1},x_{n}]
-\end{gather*}
 $$
 分段线性插值有如下的误差估计：
 $$
 \|R\|_{\infty}=\|f-I_h\|_{\infty}\le\frac{1}{8}\|f''\|_{\infty}h^2
 $$
-
 ### 3.4.2 分段三次 Hermite 插值
 
 给定节点 $a\le x_0<\dots<x_n\le b$ 的函数值和导数值 $y_j$ 和 $m_j$。
@@ -48,7 +46,6 @@ $$
 $$
 \|R\|_{\infty}=\|f-H_h\|_{\infty}\le\frac{35}{27}\|f'\|_{\infty}h
 $$
-
 ### 3.4.3 样条的性质
 
 给定节点 $a\le x_0<\dots<x_n\le b$，若函数 $S(x)$ 在区间 $[a,b]$ 上满足：
@@ -61,7 +58,6 @@ $$
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
     定义  三次样条
 </blockquote>
-
 $$
 \begin{align*}
 S_0(x)&=y_0+b_0(x-x_0)+c_0(x-x_0)^2+d_0(x-x_0)^3&x\in[x_0,x_1]\\
@@ -71,14 +67,12 @@ S_{n-1}(x)&=y_{n-1}+b_{n-1}(x-x_{n-1})+c_{n-1}(x-x_{n-1})^2\\
 &+d_{n-1}(x-x_{n-1})^3&x\in[x_{n-1},x_n]\\
 \end{align*}
 $$
-
 且满足 0,1,2 阶导数值相等
-$$\begin{gather*}
+$$
 S_i(x_i)=y_i\\
 S_i(x_{i+1})=y_{i+1},i\in[0, n-1]\\
 S'_{i-1}(x_i)=S'_i(x_i),i\in[1, n-1]\\
 S''_{i-1}(x_i)=S''_i(x_i),i\in[1, n-1]
-\end{gather*}
 $$
 
 这样总共 $3n$ 个未知数，$3n-2$ 个方程，满足上述条件的三次样条有无数多个。
@@ -129,13 +123,13 @@ b_i&=\frac{\Delta y_i}{\Delta x_i}-c_i\Delta x_i-d_i(\Delta x_i)^2\\
 &=\frac{\Delta y_i}{\Delta x_i}-\frac{\Delta x_i}{3}(c_{i+1}+2c_{i}),i\in[1, n-1]\\
 \end{align*}
 $$
+
 带入一阶导：
-$$\begin{gather*}
+$$
 \frac{\Delta y_{i}}{\Delta x_{i}}-\frac{\Delta x_{i}}{3}(c_{i+1}+2c_{i})-\frac{\Delta y_{i+1}}{\Delta x_{i+1}}+\frac{\Delta x_{i+1}}{3}(c_{i+2}+2c_{i+1})+2c_i\Delta x_{i}+(c_{i+1}-c_i)(\Delta x_{i})^2=0\\
 \Delta x_{i+1}(c_{i+2}+2c_{i+1})-\Delta x_{i}(c_{i+1}+2c_{i})+6c_i\Delta x_{i}+3(c_{i+1}-c_i)\Delta x_{i}=3(\frac{\Delta y_{i+1}}{\Delta x_{i+1}}-\frac{\Delta y_{i}}{\Delta x_{i}})\\
 \Delta x_{i+1}(c_{i+2}+2c_{i+1})+c_i\Delta x_{i}+2c_{i+1}\Delta x_{i}=3(\frac{\Delta y_{i+1}}{\Delta x_{i+1}}-\frac{\Delta y_{i}}{\Delta x_{i}})\\
 c_i\Delta x_{i}+2c_{i+1}(\Delta x_{i}+\Delta x_{i+1})+c_{i+2}\Delta x_{i+1}=3(\frac{\Delta y_{i+1}}{\Delta x_{i+1}}-\frac{\Delta y_{i}}{\Delta x_{i}}),i\in[1, n-2]
-\end{gather*}
 $$
 写成矩阵形式就是：
 $$
@@ -160,7 +154,6 @@ c_n
 0
 \end{bmatrix}}_{\mathbf b}
 $$
-
 $A$ 显然是可逆矩阵，故一定可以解出 $\mathbf c$。
 
 ### 3.4.4 端点条件
@@ -185,18 +178,16 @@ u\\
 v
 \end{bmatrix}
 $$
-
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
     条件 c: 嵌制三次样条
 </blockquote>
 
 端点处的一阶导数值是输入值，即：
-$$\begin{gather*}
+$$
 S_1'(x)=b_1=u\\
 2\Delta x_1c_{1}+\Delta x_1c_{2}=3(\frac{\Delta y_1}{\Delta x_1}-u)\\
 \frac{\Delta y_{n-1}}{\Delta x_{n-1}}-\frac{\Delta x_{n-1}}{3}(c_{n}+2c_{n-1})+2c_{n-1}\Delta x_{n-1}+3\frac{c_{n}-c_{n-1}}{3\Delta x_{n-1}}(\Delta x_{n-1})^2=v\\
 2c_{n}\Delta x_{n-1}+c_{n-1}\Delta x_{n-1}=3(v-\frac{\Delta y_{n-1}}{\Delta x_{n-1}})
-\end{gather*}
 $$
 对应 $A,\mathbf b$ 的首尾两行需修改为
 $$
@@ -209,7 +200,6 @@ $$
 3(v-\frac{\Delta y_{n-1}}{\Delta x_{n-1}})
 \end{bmatrix}
 $$
-
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
     条件 d: 抛物线端点的三次样条
 </blockquote>
@@ -227,7 +217,6 @@ $$
 0
 \end{bmatrix}
 $$
-
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
     条件 e: 非纽结的三次样条
 </blockquote>
@@ -249,7 +238,6 @@ $$
 0
 \end{bmatrix}
 $$
-
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
     定理 3.1
 </blockquote>
@@ -323,7 +311,6 @@ $$
 $$
 \|\delta\|^2_2=\langle f-\phi^*,f-\phi^*\rangle=\|f\|^2_2-\langle f,\phi^*\rangle
 $$
-
 <blockquote style="border-left: 5px solid #bb4545; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(188, 70, 70, 0.1)">
     例题
 </blockquote>
@@ -360,9 +347,9 @@ $\{\phi_j\}^n_0$ 是 $[0,1]$ 上带权 $w(x)=x$ 且最高项系数为 1 的正�
 > \langle\phi_0(x),\phi_1(x)\rangle=\int_0^1x(x+a)\ \mathrm{d}x=\frac{1}{3}+\frac{1}{2}a=0\Rightarrow a=-\frac{2}{3}
 > $$
 > 令 $\phi_2(x)=x^2+a\phi_1(x)+b\phi_1(x)$，则：
-> $$\begin{gather*}
+> $$
 > \langle\phi_0(x),\phi_2(x)\rangle=\int_0^1x^3+bx\ \mathrm{d}x=\frac{1}{4}+\frac{1}{2}b\Rightarrow b=-\frac{1}{2}\\
-> \langle\phi_1(x),\phi_2(x)\rangle=\int_0^1x^3\left(x-\frac{2}{3}\right)+ax\left(x-\frac{2}{3}\right)^2\ \mathrm{d}x=\\\frac{1}{4}+\frac{1}{2}b\Rightarrow a=-\frac{1}{2}\end{gather*}
+> \langle\phi_1(x),\phi_2(x)\rangle=\int_0^1x^3\left(x-\frac{2}{3}\right)+ax\left(x-\frac{2}{3}\right)^2\ \mathrm{d}x=\\\frac{1}{4}+\frac{1}{2}b\Rightarrow a=-\frac{1}{2}
 > $$
 > 
 
@@ -388,7 +375,6 @@ $$
 $$
 (n+1)P_{n+1}(x)=(2n+1)xP_n(x)-nP_{n-1}(x)
 $$
-
 #### Chebyshev 多项式
 
 $[-1, 1]$ 区间上带权 $w(x)=1/\sqrt{1-x^2}$ 的正交多项式

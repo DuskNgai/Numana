@@ -386,12 +386,10 @@ $$
 >
 > 因此：
 > $$
-> \begin{gather*}
 > \det((\lambda-1)I-\omega A)=(\lambda-1-2\omega)(\lambda-1-2\omega)-\omega^2\\
 > \lambda=1+\omega,1+3\omega\\
 > -1\le1+\omega,1+3\omega\le1\\
-> -2/3\le\omega\le0\\
-> \end{gather*}
+> -2/3\le\omega\le0
 > $$
 
 <blockquote style="border-left: 5px solid #bb4545; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(188, 70, 70, 0.1)">
@@ -584,8 +582,8 @@ $$
 
 > (1)
 > $$
-> \begin{gather*}x^{(k+1)}=\begin{bmatrix}0&-0.5\\-0.5&0\end{bmatrix}x^{(k)}+\begin{bmatrix}1/2\\1\end{bmatrix}\\
-> x^{(k+1)}=\begin{bmatrix}0&-1/2\\0&1/4\end{bmatrix}x^{(k)}+\begin{bmatrix}1/2\\3/4\end{bmatrix}\end{gather*}
+> x^{(k+1)}=\begin{bmatrix}0&-0.5\\-0.5&0\end{bmatrix}x^{(k)}+\begin{bmatrix}1/2\\1\end{bmatrix}\\
+> x^{(k+1)}=\begin{bmatrix}0&-1/2\\0&1/4\end{bmatrix}x^{(k)}+\begin{bmatrix}1/2\\3/4\end{bmatrix}
 > $$
 >
 > (2)
@@ -632,9 +630,9 @@ $$
 </blockquote>
 
 若 $A$ 的对角元素全为正数，而非对角元素非正，则以下四个命题有且仅有一个成立：
-$$\begin{gather*}
+$$
 \rho(G)=\rho(J)=0\qquad0<\rho(G)<\rho(J)<1\\
-\rho(G)=\rho(J)=1\qquad\rho(G)>\rho(J)>1\\\end{gather*}
+\rho(G)=\rho(J)=1\qquad\rho(G)>\rho(J)>1
 $$
 ## 2.6 超松弛（SOR）迭代法
 
@@ -684,10 +682,9 @@ $$
 > [(1-\omega)D+\omega U]x=\lambda(D-\omega L)x
 > $$
 > 记 $p=x^TDx>0,a+ib=x^TLx$，则 $a-ib=x^TUx,p-2a=x^TAx$，两边与 $x$ 做内积：
-> $$\begin{gather*}
+> $$
 > \lambda=\frac{(1-\omega)p+\omega a-i\omega b}{p-\omega a-i\omega b}\\
 > |\lambda|^2=\frac{((1-\omega)p+\omega a)^2+(\omega b)^2}{(p-\omega a)^2+(\omega b)^2}\\
 > ((1-\omega)p+\omega a)^2-(p-\omega a)^2=p\omega(2-\omega)(2a-p)<1
-> \end{gather*}
 > $$
 

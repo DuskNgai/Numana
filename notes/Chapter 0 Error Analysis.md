@@ -27,10 +27,8 @@ $$
 
 设
 $$
-\begin{gather*}
 x=\pm\overline{a_1.a_2\dots a_n}\times10^m\\
 a_1\in\{1,\dots,9\},a_i\in\{0,\dots,9\},(i\in\{2,\dots,n\}),m\in\mathbb Z
-\end{gather*}
 $$
 且
 $$
@@ -65,17 +63,13 @@ $$
 则 $x$ 至少具有 $n$ 位有效数字。
 
 > $$
-> \begin{gather*}
 > |x|=|\overline{a_1.a_2\dots a_n}\times10^m|\ge10^m\times a_1\\
 > |e_r|\le|\frac{x-x^*}{10^m\times a_1}|\le\frac{1}{2a_1}\times10^{-n+1}
-> \end{gather*}
 > $$
 >
 > $$
-> \begin{gather*}
 > |x|\le10^m\times (a_1+1)\\
 > |\epsilon|\le|10^m\times (a_1+1)\epsilon_r|\le\frac{1}{2}\times10^{m-n+1}
-> \end{gather*}
 > $$
 
 近似数 $x$ 的有效位数越多，它的相对误差限越小；反之，$x$ 的相对误差越小，它的有效位数越多。
@@ -111,19 +105,15 @@ $$
 
 设两个近似数 $x, y$, 其误差分别为 $e(x), e(y)$​, 则两数经四则运算得到的绝对误差：
 $$
-\begin{gather*}
 e(x\pm y)=(x^*\pm y^*)-(x\pm y)=e(x)\pm e(y)\\
 e(xy)=(x^*y^*)-(xy)=\cancel{e(x)e(y)}+xe(y)+ye(x)=xe(y)+ye(x)\\
 e\left(\frac{x}{y}\right)=\frac{x^*}{y^*}-\frac{x}{y}=\frac{x^*y-xy^*}{y^*y}=\frac{ye(x)-xe(y)}{y^2}
-\end{gather*}
 $$
 相对误差为：
 $$
-\begin{gather*}
 e_r(x\pm y)=\frac{(x^*\pm y^*)-(x\pm y)}{(x^*\pm y^*)}=\frac{(x^*-x)\pm(y^*-y)}{(x^*\pm y^*)}=\frac{xe_r(x)\pm ye_r(y)}{x\pm y}\\
 e_r(xy)=\frac{(x^*y^*)-(xy)}{x^*y^*}=\frac{xe(y)+ye(x)}{x^*y^*}=e_r(x)+e_r(y)\\
 e\left(\frac{x}{y}\right)=\frac{x^*y-xy^*}{x^*y}=\frac{ye(x)-xe(y)}{xy}=e_r(x)-e_r(y)
-\end{gather*}
 $$
 
 ### 函数
@@ -180,20 +170,17 @@ $$
 若 $y_0=\sqrt{2}\approx1.41$，计算到 $y_{10}$ 时候误差有多大，这个计算稳定吗？
 
 > $$
-> \begin{gather*}
 > y_n-a=10(y_{n-1}-a)\Rightarrow a=\frac{1}{9}\\
 > y_{10}=10^{10}(y_0-\frac{1}{9})+\frac{1}{9}\\
 > y_0=\sqrt{2}\Rightarrow y_{10}=12988888888.88889\\
-> y_0=1.41\Rightarrow y_{10}=13031024512.61984\\
-> \end{gather*}
+> y_0=1.41\Rightarrow y_{10}=13031024512.61984
 > $$
 >
 > 相对误差和条件数分别为：
-> $$\begin{gather*}
+> $$
 > e_r(x)=0.002979\\
 > e_r(y)=0.003233\\
 > \mathrm{Cond}_W(x)=1.085
-> \end{gather*}
 > $$
 > 比较稳定吧。
 
@@ -214,10 +201,8 @@ $$
 已知 $x=44.9222,y=44.9110$ 分别为 $x^*=\sqrt{2018},y^*=\sqrt{2017}$ 的近似值。估计近似数 $x-y$ 的有效数字位数。
 
 > $$
-> \begin{gather*}
 > |e(x)|\le\frac{1}{2}\times10^{-4}\quad |e(y)|\le\frac{1}{2}\times10^{-4}\\
 > |e(x-y)|\le|e(x)|+|e(y)|=10^{-4}\le\frac{1}{2}\times10^{-3}
-> \end{gather*}
 > $$
 >
 > 因为 $m=-1$，则 $n=3$，即有效数字仅有 $3$ 位。

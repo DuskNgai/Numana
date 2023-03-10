@@ -294,6 +294,10 @@ class GaussLegendre(object):
 
     Args:
         f (sp.Function): the function to evaluate on some intervals.
+
+    Attributes:
+        ROOT (tuple[tuple[float]]): The roots of the first 5 Legendre polynomials.
+        COEFFICIENT (tuple[tuple[float]]): The integration of the Lagrange interpolating polynomials of the roots on interval [-1, 1].
     """
 
     ROOT = (
@@ -301,8 +305,8 @@ class GaussLegendre(object):
         (-math.sqrt(3.0) / 3.0, math.sqrt(3.0) / 3.0),
         (-math.sqrt(15.0) / 5.0, 0.0, math.sqrt(15.0) / 5.0),
         (-math.sqrt(525.0 + 70.0 * math.sqrt(30.0)) / 35.0, -math.sqrt(525.0 - 70.0 * math.sqrt(30.0)) / 35.0, math.sqrt(525.0 - 70.0 * math.sqrt(30.0)) / 35.0, math.sqrt(525.0 + 70.0 * math.sqrt(30.0)) / 35.0),
-        (-math.sqrt(8820.0 + 504.0 * math.sqrt(70.0)) / 126.0, -math.sqrt(8820.0 - 504.0 * math.sqrt(70.0)) / 126.0, 0.0, math.sqrt(8820.0 - 504.0 * math.sqrt(70.0)) / 126.0, math.sqrt(8820.0 + 504.0 * math.sqrt(70.0)) / 126.0)
-    )
+        (-math.sqrt(245.0 + 14.0 * math.sqrt(70.0)) / 21.0, -math.sqrt(245.0 - 14.0 * math.sqrt(70.0)) / 21.0, 0.0, math.sqrt(245.0 - 14.0 * math.sqrt(70.0)) / 21.0, math.sqrt(245.0 + 14.0 * math.sqrt(70.0)) / 21.0)
+    ) 
 
     COEFFICIENT = (
         (2.0,),
@@ -348,3 +352,49 @@ class GaussLegendre(object):
             root = 0.5 * ((b - a) * r + b + a)
             result += c * self.numeric_f(root) * (b - a) * 0.5
         return result
+
+class GaussChebyshev(object):
+    """
+    Gauss-Chebyshev methods for numerical integration.
+
+    Args:
+        f (sp.Function): the function to evaluate on some intervals.
+    """
+
+    def __init__(self, f: sp.Function):
+        self.x = sympy.abc.x
+        self.symbol_f = f
+        self.numeric_f = sp.lambdify(self.x, f, "numpy")
+
+    def __call__(self, a: float, b: float) -> Tuple[float, float, float, float, float]:
+        """
+        Evaluate the Gauss-Chebyshev methods on the interval [a, b].
+
+        Args:
+            a (float): The lower bound of the interval.
+            b (float): The upper bound of the interval.
+
+        Returns:
+            Tuple[float, float, float, float, float]: 
+                The results of the first 4 order Gauss-Chebyshev methods and the exact result.
+        """
+
+        assert not (math.isinf(a) or math.isnan(a)), "Invalid interval."
+        assert not (math.isinf(b) or math.isnan(b)), "Invalid interval."
+
+        return (
+            self._solver(a, b, 0),
+            self._solver(a, b, 1),
+            self._solver(a, b, 2),
+            self._solver(a, b, 3),
+            self._solver(a, b, 4),
+            sp.integrate(self.symbol_f, (self.x, a, b)),
+        )
+
+    def _solver(self, a: float, b: float, order: int) -> float:
+        result = 0.0
+        for i in range(1, order + 2):
+            root = 0.5 * ((b - a) * math.cos((2 * i - 1) / (2 * (order + 1)) * math.pi) + b + a)
+            result += self.numeric_f(root) * (b - a) * 0.5
+        return result
+

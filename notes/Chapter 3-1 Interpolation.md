@@ -194,10 +194,9 @@ $$
 
 已知 $f(x)=-6x^9+8x^7+5x-4$，计算 $f[2^02^1\dots2^9]$ 和 $f[2^02^1\dots2^{10}]$
 
-> $$\begin{gather*}
+> $$
 > f[2^02^1\dots2^9]=\frac{1}{9!}f^{(n)}(\xi)=-6\\
 > f[2^02^1\dots2^{10}]=0
-> \end{gather*}
 > $$
 
 ### 3.1.3 经过 n 个点的 d 阶多项式有几个
@@ -211,56 +210,63 @@ n - 1 阶和以下的可能为 0 个，1 个和无数个。
 既要求插值函数在节点处与已知的函数值相等, 同时要求插值函数的某些导数与已知函数的导数值相等。
 
 <blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
-    定义 3.4 两点三次 Hermite 插值
+    Hermite 插值
 </blockquote>
 
-已知 $f(x_0)=y_0,f(x_1)=y_1,f'(x_0)=m_0,f'(x_1)=m_1$。设
-$$
-H_3(x)=\alpha_0(x)y_0+\alpha_1(x)y_1+\beta_0(x)m_0+\beta_1(x)m_1
-$$
-其中：
-$$\begin{gather*}
-\alpha_i(x_j)=\delta_{ij}\quad\alpha'_i(x_j)=0\\
-\beta_i(x_j)=0\quad\beta'_i(x_j)=\delta_{ij}
-\end{gather*}
-$$
-利用 Lagrange 插值基函数 $l_i(x_j)=\delta_{ij}$，则设
-$$
-\alpha_i(x)=[a(x-x_i)+1]l_i^2(x)
-$$
-则：
-$$
-\alpha'_i(x)=al_i^2(x)+[a(x-x_i)+1]2l_i(x)l'_i(x)\Rightarrow a=-2l'_i(x)
-$$
-$\alpha_i(x)=[1-2l'_i(x)(x-x_i)]l_i^2(x)$。同理得到 $\beta_i(x)=(x-x_i)l_i^2(x)$。
+已知在节点 $a\le x_0<x_1<\cdots<x_n\le b$ 上，节点处的函数值和导数值 $f(x_i)$ 和 $f'(x_i)$ 已知，求插值多项式满足 Hermite 条件。
 
-<blockquote style="border-left: 5px solid #42b983; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(66, 185, 131, 0.1)">
-    定义 3.5 一般 Hermite 插值
-</blockquote>
-
-$n+1$ 个点得到 $2n+1$ 阶多项式。
-
-已知在节点 $a\le x_0<x_1<\cdots<x_n\le b$ 上，$y_j=f(x_j),m_j=f'(x_j)$，求插值多项式满足 Hermite 条件。
-
+设
+$$
+H_{2n+1}(x)=\sum_{i=0}^{n}\alpha_i(x)f(x_i)+\sum_{i=0}^{n}\beta_i(x)f'(x_i)
+$$
+其中 $\alpha_i(x)$ 和 $\beta_i(x)$ 都是 $2n+1$ 次的多项式。为了使得插值函数在节点处满足函数值和导数值相等的条件，其中：
+$$
+\begin{cases}\alpha_i(x_j)=\delta_{ij}\\\beta_i(x_j)=0\end{cases}\quad
+\begin{cases}\alpha'_i(x_j)=0\\\beta'_i(x_j)=\delta_{ij}\end{cases}
+$$
+利用 Lagrange 插值基函数 $l_i(x_j)=\delta_{ij}$，且由于 $l_i(x)$ 是 $n$ 次多项式，则设
+$$
+\alpha_i(x)=a_i(x)l_i^2(x)\\
+\beta_i(x)=b_i(x)l_i^2(x)
+$$
+其中 $a_i(x)$ 和 $b_i(x)$ 都是一次函数。因此：
+$$
+\alpha'_i(x)=a'_i(x)l_i^2(x)+2a_i(x)l_i(x)l'_i(x)\\
+\beta'_i(x)=b'_i(x)l_i^2(x)+2b_i(x)l_i(x)l'_i(x)
+$$
+带入 $x_i$，可以得到：
+$$
+\alpha_i(x_i)=a_i(x_i)l_i^2(x_i)=a_i(x_i)\delta_{ii}=\delta_{ii}\Longrightarrow a_i(x_i)=1\\
+\beta_i(x_i)=b_i(x_i)l_i^2(x_i)=b_i(x_i)\delta_{ii}=0\Longrightarrow b_i(x_i)=0\\
+$$
+带入 $x_i$ 和 $a_i(x_i)$ 和 $b_i(x_i)$，可以得到：
+$$
+\alpha'_i(x_i)=a'_i(x_i)l_i^2(x_i)+2a_i(x_i)l_i(x_i)l'_i(x_i)=a'_i(x_i)\delta_{ii}+2l'_i(x_i)\delta_{ii}\Longrightarrow a'_i(x_i)=-2l'_i(x_i)\\
+\beta'_i(x_i)=b'_i(x_i)l_i^2(x_i)+2b_i(x_i)l_i(x_i)l'_i(x_i)=b'_i(x_i)\delta_{ii}=\delta_{ii}\Longrightarrow b'_i(x_i)=1
+$$
+由于一次函数，则
+$$
+\alpha_i(x)=[1-2l'_i(x)(x-x_i)]l_i^2(x)\\
+\beta_i(x)=(x-x_i)l_i^2(x)
+$$
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
-    定理 3.4
+    Hermite 多项式
 </blockquote>
-
-满足上述插值条件的 Hermite 多项式 $H_{2n+1}(z)$ 存在且唯一，且
-$$\begin{gather*}
-H_{2n+1}=\sum_{j=0}^n\alpha_j(x)y_j+\sum_{j=0}^n\beta_j(x)m_j\\
-\alpha_j(x)=[1-2(x-x_j)l'_j(x_j)]l^2_j(x)\quad \beta_j(x)=(x-x_j)l^2_j(x)\end{gather*}
+已知在节点 $a\le x_0<x_1<\cdots<x_n\le b$ 上，节点处的函数值和导数值 $f(x_i)$ 和 $f'(x_i)$ 已知。满足上述插值条件的 Hermite 多项式 $H_{2n+1}(x)$ 存在且唯一，且
 $$
-这里 $\alpha,\beta$ 同上。
-
+H_{2n+1}=\sum_{i=0}^n\alpha_i(x)f(x_i)+\sum_{i=0}^n\beta_i(x)f'(x_i)\\
+\alpha_i(x)=[1-2(x-x_i)l'_i(x_i)]l^2_i(x)\quad\beta_i(x)=(x-x_i)l^2_i(x)
+$$
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
     定理 3.5
 </blockquote>
 
 设 $f(x)$ 在 $[a,b]$ 上具有 $2n+2$ 阶导数，则：
 $$
-R_{2n+1}=f(x)-H_{2n+1}(x)=\frac{f^{(2n+2)}(\xi)}{(2n+2)!}\omega^2_{n+1}(x)
+R_{2n+1}(x)=f(x)-H_{2n+1}(x)=\frac{f^{(2n+2)}(\xi)}{(2n+2)!}\omega^2_{n+1}(x)
 $$
+> 证明在下面。
+
 ### 3.1.5 Newton-Hermite 插值
 
 设 $x_1<x_2<\dots<x_s$，$y^{(h)}_k$ 是给定的实数。其中 $h\in\{0,\dots,a_{k}-1\},k\in\{1, \dots,s\},\{a_s\}\in\mathbb Z^+,\sum a_s=n+1$。
@@ -270,9 +276,9 @@ $$
 P^{(h)}_n(x_k)=y^{(h)}_k\quad h\in\{0,\dots,a_{k}-1\},k\in\{1, \dots,s\}
 $$
 1. 将求节点按重复出现次数重排，即求节点为
-$$
+    $$
     \left\{\underbrace{x_1,\dots,x_1}_{a_1},\dots,\underbrace{x_s,\dots,x_s}_{a_s}\right\}
-$$
+    $$
     再将上述点重新按顺序编号，得到 $z_0,\dots,z_n$，称为具有重节点的插值节点组。
 
 2. 根据插值节点组及插值条件，构造差商表。这里，需要利用重节点差商公式
@@ -326,8 +332,6 @@ $$
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
     定理 3.6
 </blockquote>
-
-
 如果 $f(x)\in C^n[a,b]$，$f^{(n+1)}$ 在 $(a,b)$ 上存在，则对于 $\forall x\in[a,b],\exists\xi\in(a,b)$，使得：
 $$
 R_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}\omega_{n+1}(x)
@@ -344,10 +348,9 @@ $$
 > \phi(t)=f(t)-P_n(t)-A(x)(t-x_0)\dots(t-x_n)
 > $$
 > 则
-> $$\begin{gather*}
+> $$
 > \phi(x)=f(x)-P_n(x)-R_n(x)=0\\
 > \phi(x_i)=f(x_i)-P_n(x_i)-0=0
-> \end{gather*}
 > $$
 > 因此 $\phi(t)$ 具有 $n+2$ 个零点。对 $t$ 求 $n$ 阶导数后，$\phi^{(n)}(t)$ 具有 $2$ 个零点，此时：
 > $$
@@ -361,8 +364,6 @@ $$
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
     定理 3.7
 </blockquote>
-
-
 
 记 $h=\max_{1\le i\le n}(x_i-x_{i-1})$，则：
 $$
@@ -383,8 +384,6 @@ $$
     定理 3.8
 </blockquote>
 
-
-
 牛顿插值公式余项为：
 $$
 R_n(x)=f(x)-N_n(x)=f[x_0\dots x_nx]\omega_{n+1}(x)
@@ -404,17 +403,14 @@ $$
 <blockquote style="border-left: 5px solid #4545aa; border-radius: 3px 0 0 3px; padding: 10px 15px; background-color: rgba(70, 70, 188, 0.1)">
     定理 3.9
 </blockquote>
-
-
 若 $f\in C^4[a,b]$ 则利用 Rolle 定理, 可得 Hermite 插值余项为：
 $$
 R_3(x)=f(x)-H_3(x)=\frac{1}{4!}f^{(4)}(\xi)(x-x_0)^2(x-x_1)^2
 $$
 
-> $$\begin{gather*}
+> $$
 > R_3(x_i)=f(x_i)-H_3(x_i)=0\\
 > R'_3(x_i)=f'(x_i)-H'_3(x_i)=0
-> \end{gather*}
 > $$
 >则 $R_3(x)$ 具有如下形式：
 > $$

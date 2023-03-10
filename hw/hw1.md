@@ -9,11 +9,9 @@
 
 (1)
 $$
-\begin{gather*}
 23000=2.3000\times10^{4}\Rightarrow m=4,n=5\\
 \epsilon\le0.5\times10^{4-5+1}=0.5\\
 \epsilon_r\le\frac{1}{2\times2}\times10^{-5+1}=2.5\times10^{-5}
-\end{gather*}
 $$
 $23000$ 具有 $5$ 位有效数字，绝对误差限 $\epsilon$ 为 $0.5$，相对误差限 $\epsilon_r$ 为 $2.5\times10^{-5}$。
 

@@ -73,10 +73,8 @@ x[i + 1] = g(x[i])
 
 设迭代函数 $\phi(x)$ 满足唯一不动点条件，则迭代格式 $x_{k+1}=\phi(x_k)$ 对于 $\forall x_0\in[a,b]$ 收敛，且有误差估计：
 $$
-\begin{gather*}
 |x_k-x^*|\le\frac{L}{1-L}|x_k-x_{k-1}|\\
 |x_k-x^*|\le\frac{L^k}{1-L}|x_1-x_0|
-\end{gather*}
 $$
 上式为事后估计，下式为先验估计（证明同线性方程组迭代解）。
 
@@ -99,10 +97,8 @@ $$
 
 > 令 $x_i$ 表示第 $i$ 步迭代，根据 Lagrange 中值定理，在 $x_i$ 和 $r$ 之间存在 $c_i$​ 满足：
 > $$
-> \begin{gather*}
 > \frac{g(x_i)-g(r)}{x_i-r}=g'(c_i)\\
 > x_{i+1}-r=g'(c_i)(x_i-r)
-> \end{gather*}
 > $$
 > 带入 $e_i = |x_i - r|$，则：
 > $$
@@ -169,10 +165,8 @@ $x^3-x^2-x-1=0$ 在 $[1,2]$ 内的根。
 $3-3x-2\sin x=0$ 在 $[0,1]$ 内。证明对于任意初始值，$x_{k+1}=1-(2\sin x_k)/3$ 均收敛。$x_0=0$ 时候经过多少次迭代才能保证误差小于 $10^{-3}$。
 
 > $$
-> \begin{gather*}
 > \frac{1}{3}<1-\frac{2}{3}\sin x_0<\frac{5}{3}\\
-> 0<1-\frac{2}{3}\sin x_1<1\\
-> \end{gather*}
+> 0<1-\frac{2}{3}\sin x_1<1
 > $$
 >
 > $$
@@ -298,11 +292,9 @@ $$
 $$
 > 设此时的 $f(x)=(x-x^*)^mg(x)$，则
 > $$
-> \begin{gather*}
 > x_{k+1}=x_k-\frac{(x_k-x^*)^mg(x_k)}{m(x_k-x^*)^{m-1}g(x_k)+(x_k-x^*)^mg'(x_k)}\\
 > \frac{x_{k+1}-x^*}{x_k-x^*}=1-\frac{g(x_k)}{mg(x_k)+(x_k-x^*)g'(x_k)}\\
 > \lim_{k\to\infty}\frac{x_{k+1}-x^*}{x_k-x^*}=1-\frac{1}{m}\\
-> \end{gather*}
 > $$
 
 因此，我们可以改进在多重根处的牛顿法使其收敛速度更快：
@@ -375,11 +367,9 @@ x[i + 1] = x[i] - (f(x[i]) * (x[i] - x[i - 1])) / (f(x[i]) - f(x[i - 1]))
 
 该方法是牛顿法的变种，当迭代次数多的时候，$x_i-x_{i-1}$ 会足够接近，和导数值相近。
 $$
-\begin{gather*}
 x_{i+1}=x_i-\frac{f(x_i)}{f'(x_i)}\\
 f'(x_i)\approx\frac{f(x_i)-f(x_{i-1})}{x_i-x_{i-1}}\\
-x_{i+1}=x_i-\frac{f(x_i)(x_i-x_{i-1})}{f(x_i)-f(x_{i-1})}=\frac{x_if(x_{i-1})-x_{i-1}f(x_i)}{f(x_i)-f(x_{i-1})}\\
-\end{gather*}
+x_{i+1}=x_i-\frac{f(x_i)(x_i-x_{i-1})}{f(x_i)-f(x_{i-1})}=\frac{x_if(x_{i-1})-x_{i-1}f(x_i)}{f(x_i)-f(x_{i-1})}
 $$
 
 **`Theorem: `**令 $f$ 为二阶连续可微函数，如果割线法收敛到 $r$，即 $f(r)=0$，如果 $f'(r)\ne0,f''(r)\ne0$，则误差 $e_i$ 遵从：
@@ -471,10 +461,8 @@ $$
 
  逆二次插值类似于 Muller 和切线方法，但是用形如 $x=p(y)$ 形式的抛物线：
 $$
-\begin{gather*}
 p(y)=\frac{a(y-B)(y-C)}{(A-B)(A-C)}+\frac{b(y-A)(y-C)}{(B-A)(B-C)}+\frac{c(y-A)(y-B)}{(C-A)(C-B)}\\
 A=f(a),B=f(b),C=f(c)
-\end{gather*}
 $$
 带入 $y=0$：
 $$
