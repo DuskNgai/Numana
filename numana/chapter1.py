@@ -3,7 +3,7 @@ import sympy as sp
 import sympy.abc
 
 class Solver(object):
-    epsilon = np.finfo(float).eps
+    epsilon: float = np.finfo(float).eps
 
     def __init__(self, f: sp.Function):
         self.symbol_f = f
@@ -19,6 +19,7 @@ class Solver(object):
 
         Args:
             a (float): One evaluation point.
+            b (float): One evaluation point.
 
         Returns:
             float: The root of the equation.
@@ -40,7 +41,7 @@ class Solver(object):
                 a, fa = c, fc
         return (a + b) / 2
 
-    def fixedPointIteration(self, a: float) -> float:
+    def fixed_point_iteration(self, a: float) -> float:
         """
         Using fixed point iteration to find the root.
 
@@ -105,7 +106,7 @@ class Solver(object):
             fa, fb = fb, self.numeric_f(c)
         return b
 
-    def regulaFalsi(self, a: float, b: float) -> float:
+    def regula_falsi(self, a: float, b: float) -> float:
         """
         A combination of bisection and secant method.
 
@@ -132,7 +133,7 @@ class Solver(object):
                 a, fa = c, fc
         return b if abs(fb) < abs(self.numeric_f((a + b) / 2.0)) else (a + b) / 2.0
 
-    def inverseInterpolation(self, a: float, b: float, c: float) -> float:
+    def inverse_interpolation(self, a: float, b: float, c: float) -> float:
         """
         Inverse quadratic interpolation method for solving equations.
 

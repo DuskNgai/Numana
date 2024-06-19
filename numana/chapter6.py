@@ -6,7 +6,9 @@ import sympy as sp
 class EulerMethod(object):
     """
     Integrator for solving `y' = f(x, y)` with initial value `y(0)`.
-    @param `f`: the function to be solve.
+
+    Args:
+        f: The function `f(x, y)` in the equation.
     """
     def __init__(self, f: sp.Function):
         self.x = sp.Symbol('x')
@@ -14,13 +16,17 @@ class EulerMethod(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify([self.x, self.y], f, "numpy")
 
-    def explicit(self, initial: float, num_steps: int = 100, interval: Tuple[float, float] = (0.0, 1.0)):
+    def explicit(self, initial: float, num_steps: int = 100, interval: Tuple[float, float] = (0.0, 1.0)) -> np.ndarray:
         """
         Using explicit Euler method.
-        @param `initial`: the initial value `y(0)`.
-        @param `num_steps`: the number of steps.
-        @param `interval`: the interval for solving.
-        @return: A list of final values.
+
+        Args:
+            initial (float): the initial value `y(0)`.
+            num_steps (int): the number of steps.
+            interval (Tuple[float, float]): the interval for solving.
+
+        Returns:
+            (np.ndarray): Solution at each step.
         """
         initial = np.asarray(initial)
         assert isinstance(num_steps, int) and num_steps > 0, "Number of steps must be a positive integer."
@@ -36,13 +42,9 @@ class EulerMethod(object):
 
         return ys
 
-    def trapezoid(self, initial: float, num_steps: int = 100, interval: Tuple[float, float] = (0.0, 1.0)):
+    def trapezoid(self, initial: float, num_steps: int = 100, interval: Tuple[float, float] = (0.0, 1.0)) -> np.ndarray:
         """
-        Using explicit Euler method.
-        @param `initial`: the initial value `y(0)`.
-        @param `num_steps`: the number of steps.
-        @param `interval`: the interval for solving.
-        @return: A list of final values.
+        Using trapezoid Euler method.
         """
         initial = np.asarray(initial)
         assert isinstance(num_steps, int) and num_steps > 0, "Number of steps must be a positive integer."

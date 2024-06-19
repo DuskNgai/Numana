@@ -4,10 +4,3 @@ __pycache__
 
 figure
 *.pdf
-
-*sty
-*.xlsx
-*.aux
-*.log
-*.out
-*.gz

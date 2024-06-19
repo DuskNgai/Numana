@@ -1,5 +1,5 @@
-from typing import Iterable, Optional, Union
-from icecream import ic
+from numbers import Number
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,7 +9,7 @@ class LagrangeInterpolation:
     Interpolates input points, work as a functor.
     @param x, y: the points to interpolate.
     """
-    def __init__(self, x: Iterable, y: Iterable):
+    def __init__(self, x: np.ndarray, y: np.ndarray):
         self.x = np.asarray(x, dtype=float).reshape(1, -1)
         self.y = np.asarray(y, dtype=float).reshape(-1)
 
@@ -21,7 +21,7 @@ class LagrangeInterpolation:
         self.xi_xj = self.x.T - self.x
         print(self.xi_xj)
 
-    def __call__(self, x0: Union[float, Iterable]):
+    def __call__(self, x0: Number | np.ndarray) -> Number | np.ndarray:
         if isinstance(x0, (int, float)):
             x0 = float(x0)
             # numpy version, only for single x0
@@ -48,7 +48,7 @@ class NewtonDividedDifference:
     @param x, y: the points to interpolate.
     """
 
-    def __init__(self, x: Iterable, y: Iterable):
+    def __init__(self, x: np.ndarray, y: np.ndarray):
         self.x = np.asarray(x, dtype=float).reshape(1, -1)
         self.y = np.asarray(y, dtype=float).reshape(1, -1)
 
@@ -68,7 +68,7 @@ class NewtonDividedDifference:
         for i in range(1, self.n):
             self.coefficients[:self.n - i, i] = np.diff(self.coefficients[:, i - 1])[:self.n - i] / self.xi_xj[:self.n - i, i]
 
-    def __call__(self, x0: Union[float, Iterable]):
+    def __call__(self, x0: Number | np.ndarray) -> Number | np.ndarray:
         if isinstance(x0, (int, float)):
             x0 = float(x0)
         else:
@@ -85,7 +85,7 @@ class CubicSpline:
     @param x, y: the points to interpolate.
     @param edge_case: natural, clamp, not-a-knot
     """
-    def __init__(self, x: Iterable, y: Iterable, edge_case='natural'):
+    def __init__(self, x: np.ndarray, y: np.ndarray, edge_case: str = 'natural'):
         self.x = np.asarray(x, dtype=float).reshape(-1)
         self.y = np.asarray(y, dtype=float).reshape(-1)
 
@@ -123,7 +123,7 @@ class CubicSpline:
         self.d = (self.c[1:] - self.c[:-1]) / (3 * dx)
         self.b = (dy / dx) - (dx / 3) * (2 * self.c[:-1] + self.c[1:])
 
-    def __call__(self, x0: Union[float, Iterable]):
+    def __call__(self, x0: Number | np.ndarray) -> Number | np.ndarray:
         if isinstance(x0, (int, float)):
             x0 = float(x0)
         else:

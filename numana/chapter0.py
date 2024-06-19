@@ -1,19 +1,17 @@
-from typing import Optional, Union
-
 import numpy as np
 
-def nest(
-    x: Union[float, list[float]],
+def horner_eval(
+    x: float | list[float],
     coefficients: list[float],
-    base_points: Optional[list[float]] = None
+    base_points: list[float] | None = None
 ) -> float:
     """
     Using Horner's method to evaluate a polynomial at point `x`.
 
     Args:
-        x (Union[float, list[float]]): the point(s) to evaluate at.
+        x (float | list[float]): the point(s) to evaluate at.
         coefficients (list[float]): The coefficients of the polynomial from lowest to highest order.
-        base_points (Optional[list[float]], optional): The base points of the polynomial. Defaults to None.
+        base_points (list[float] | None): The base points of the polynomial. Defaults to None.
 
     Returns:
         float: The value of the polynomial at point `x`.
@@ -31,14 +29,9 @@ def nest(
 
     return y
 
-def quadratic(a: float, b: float, c: float) -> tuple[float, float]:
+def quadratic(a: float, b: float, c: float) -> tuple[float, float] | tuple[None, None]:
     """
     Solve the quadratic equation `ax^2 + bx + c = 0`.
-
-    Args:
-        a (float): The quadratic coefficient.
-        b (float): The linear coefficient.
-        c (float): The constant term.
 
     Returns:
         tuple[float, float]: The two solutions of the equation.
@@ -54,16 +47,18 @@ def quadratic(a: float, b: float, c: float) -> tuple[float, float]:
             solution = (-(b + sqrt_discriminant) / (2.0 * a), -(2.0 * c) / (b + sqrt_discriminant))
         else:
             solution = ((sqrt_discriminant - b) / (2.0 * a), (2.0 * c) / (sqrt_discriminant - b))
+    else:
+        solution = (None, None)
 
     return solution
 
-def dec2bin(deci: Union[float, str], fraction_len: int = 10) -> str:
+def dec2bin(deci: float | str, fraction_len: int = 10) -> str:
     """
     Convert a decimal formed number into binary form.
 
     Args:
-        deci (Union[float, str]): The decimal number.
-        fraction_len (int, optional): The length of fractional part. Defaults to 10.
+        deci (float | str): The decimal number.
+        fraction_len (int): The length of fractional part. Defaults to 10.
 
     Returns:
         str: The binary number.
@@ -103,13 +98,13 @@ def dec2bin(deci: Union[float, str], fraction_len: int = 10) -> str:
     result = ''.join(result)
     return result
 
-def bin2dec(bina: str, recur_pos: tuple = None) -> float:
+def bin2dec(bina: str, recur_pos: tuple[int, int] | None = None) -> float:
     """
     Convert a binary formed number into decimal form.
 
     Args:
         bina (str): The binary number.
-        recur_pos (tuple, optional): The start and the end of the recurring fraction after the binary point. Defaults to None.
+        recur_pos (tuple[int, int] | None): The start and the end of the recurring fraction after the binary point. Defaults to None.
 
     Returns:
         float: The decimal number.
@@ -117,16 +112,16 @@ def bin2dec(bina: str, recur_pos: tuple = None) -> float:
 
     num = str(bina)
     binary_point = num.find('.')
-    if recur_pos != None:
+    if recur_pos is not None:
         start, end = recur_pos
         x = num[:binary_point] + num[binary_point + 1:]
         y = num[:binary_point] + num[binary_point + 1: binary_point + start + 1]
         x_coefficient = list(map(int, x))
         x_coefficient.reverse()
-        x_result = nest(2, x_coefficient)
+        x_result = horner_eval(2, x_coefficient)
         y_coefficient = list(map(int, y))
         y_coefficient.reverse()
-        y_result = nest(2, y_coefficient)
+        y_result = horner_eval(2, y_coefficient)
 
         x_scale = 2 << end
         y_scale = 1 << start
@@ -141,9 +136,9 @@ def bin2dec(bina: str, recur_pos: tuple = None) -> float:
 
         integer_coefficient = list(map(int, integer))
         integer_coefficient.reverse()
-        result = nest(2, integer_coefficient)
+        result = horner_eval(2, integer_coefficient)
 
         fraction_coefficient = list(map(int, fraction))
-        result += nest(0.5, fraction_coefficient)
+        result += horner_eval(0.5, fraction_coefficient)
 
     return result

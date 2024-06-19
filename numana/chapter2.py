@@ -9,7 +9,7 @@ class GaussJordan(object):
 
     def __init__(self, A: np.ndarray):
         self.A = np.asarray(A, dtype=float)
-        assert len(A.shape) == 2, "A must be a 2D matrix"
+        assert A.ndim == 2, "A must be a 2D matrix"
         assert A.shape[0] == A.shape[1], "A must be a 2D square matrix"
 
         self.n = self.A.shape[0]
@@ -55,7 +55,7 @@ class LU(object):
 
     def __init__(self, A: np.ndarray):
         A = np.asarray(A, dtype=float)
-        assert len(A.shape) == 2, "A must be a 2D matrix"
+        assert A.ndim == 2, "A must be a 2D matrix"
         assert A.shape[0] == A.shape[1], "A must be a 2D square matrix"
 
         self.n = A.shape[0]
@@ -111,7 +111,7 @@ class Cholesky(object):
 
     def __init__(self, A: np.ndarray):
         A = np.asarray(A, dtype=float)
-        assert len(A.shape) == 2, "A must be a 2D matrix"
+        assert A.ndim == 2, "A must be a 2D matrix"
         assert np.array_equal(A, A.T), "A must be a symmetric matrix"
         n = A.shape[0]
 

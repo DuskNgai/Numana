@@ -2,6 +2,12 @@
 
 Code for Numerical Analysis.
 
+## Setup
+
+```bash
+conda install -c conda-forge numpy pytest sympy
+```
+
 ## Check List
 
 ### Chapter 0 Fundamentals

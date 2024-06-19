@@ -1,5 +1,4 @@
 import math
-from typing import Tuple
 
 import numpy as np
 import sympy as sp
@@ -18,16 +17,16 @@ class NumericalDifferentiation(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
-    def __call__(self, x: float, h: float = 1e-6) -> Tuple[float, float, float, float, float, float]:
+    def __call__(self, x: float, h: float = 1e-6) -> tuple[float, float, float, float, float, float]:
         """
         Evaluate the numerical differentiation methods at `x`.
 
         Args:
             x (float): The point to evaluate.
-            h (float, optional): The step size. Defaults to 1e-6.
+            h (float): The step size. Defaults to 1e-6.
 
         Returns:
-            Tuple[float, float, float, float, float, float]:
+            tuple[float, float, float, float, float, float]:
                 The results of the two-point forward/backward method for first derivatives,
                 the three-point centered method for first and second order derivatives,
                 the five-point centered method for first derivatives,
@@ -35,28 +34,28 @@ class NumericalDifferentiation(object):
         """
 
         return (
-            self._twoPointForward(x, h),
-            self._twoPointBackward(x, h),
-            self._threePointCentered(x, h),
-            self._fivePointCentered(x, h),
+            self._two_point_forward(x, h),
+            self._two_point_backward(x, h),
+            self._three_point_centered(x, h),
+            self._five_point_centered(x, h),
             sp.diff(self.symbol_f, self.x).subs(self.x, x),
-            self._threePointCenteredSecondOrder(x, h),
+            self._three_point_centered_second_order(x, h),
             sp.diff(self.symbol_f, self.x, 2).subs(self.x, x),
         )
 
-    def _twoPointForward(self, x: float, h: float) -> float:
+    def _two_point_forward(self, x: float, h: float) -> float:
         """Two-point forward-difference method."""
         return (self.numeric_f(x + h) - self.numeric_f(x)) / h
 
-    def _twoPointBackward(self, x: float, h: float) -> float:
+    def _two_point_backward(self, x: float, h: float) -> float:
         """Two-point backward-difference method."""
         return (self.numeric_f(x) - self.numeric_f(x - h)) / h
 
-    def _threePointCentered(self, x: float, h: float) -> float:
+    def _three_point_centered(self, x: float, h: float) -> float:
         """Three-point centered-difference method."""
         return (self.numeric_f(x + h) - self.numeric_f(x - h)) / (2 * h)
 
-    def _fivePointCentered(self, x: float, h: float) -> float:
+    def _five_point_centered(self, x: float, h: float) -> float:
         """Five-point centered-difference method."""
         return (
             -self.numeric_f(x + 2 * h)
@@ -65,7 +64,7 @@ class NumericalDifferentiation(object):
             + self.numeric_f(x - 2 * h)
         ) / (12 * h)
 
-    def _threePointCenteredSecondOrder(self, x: float, h: float) -> float:
+    def _three_point_centered_second_order(self, x: float, h: float) -> float:
         """Three-point centered-difference method for second-order derivative."""
         return (self.numeric_f(x + h) - 2 * self.numeric_f(x) + self.numeric_f(x - h)) / (h * h)
 
@@ -82,7 +81,7 @@ class NewtonCotes(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
-    def __call__(self, a: float, b: float) -> Tuple[float, float, float, float, float, float, float, float]:
+    def __call__(self, a: float, b: float) -> tuple[float, float, float, float, float, float, float, float]:
         """
         Evaluate the Newton-Cotes methods on the interval [a, b].
 
@@ -91,7 +90,7 @@ class NewtonCotes(object):
             b (float): The upper bound of the interval.
 
         Returns:
-            Tuple[float, float, float, float, float, float, float, float]: 
+            tuple[float, float, float, float, float, float, float, float]: 
                 The results of the first 7 order Newton-Cotes methods and the exact result.
         """
 
@@ -99,24 +98,24 @@ class NewtonCotes(object):
         assert not (math.isinf(b) or math.isnan(b)), "Invalid interval."
 
         return (
-            self._firstOrder(a, b),
-            self._secondOrder(a, b),
-            self._thirdOrder(a, b),
-            self._forthOrder(a, b),
-            self._fifthOrder(a, b),
-            self._sixthOrder(a, b),
-            self._seventhOrder(a, b),
+            self._first_order(a, b),
+            self._second_order(a, b),
+            self._third_order(a, b),
+            self._forth_order(a, b),
+            self._fifth_order(a, b),
+            self._sixth_order(a, b),
+            self._seventh_order(a, b),
             sp.integrate(self.symbol_f, (self.x, a, b)),
         )
 
-    def _firstOrder(self, a: float, b: float) -> float:
+    def _first_order(self, a: float, b: float) -> float:
         """Trapezoid Rule."""
         h = (b - a)
         y0 = self.numeric_f(a)
         y1 = self.numeric_f(b)
         return h * (y0 + y1) / 2.0
 
-    def _secondOrder(self, a: float, b: float) -> float:
+    def _second_order(self, a: float, b: float) -> float:
         """Simpson's Rule."""
         h = (b - a) / 2.0
         y0 = self.numeric_f(a)
@@ -124,7 +123,7 @@ class NewtonCotes(object):
         y2 = self.numeric_f(b)
         return h * (y0 + 4.0 * y1 + y2) / 3.0
 
-    def _thirdOrder(self, a: float, b: float) -> float:
+    def _third_order(self, a: float, b: float) -> float:
         """Simpson's 3/8 Rule"""
         h = (b - a) / 3.0
         y0 = self.numeric_f(a)
@@ -133,7 +132,7 @@ class NewtonCotes(object):
         y3 = self.numeric_f(b)
         return h * (y0 + 3.0 * (y1 + y2) + y3) * 3.0 / 8.0
 
-    def _forthOrder(self, a: float, b: float) -> float:
+    def _forth_order(self, a: float, b: float) -> float:
         """Boole's Rule"""
         h = (b - a) / 4.0
         y0 = self.numeric_f(a)
@@ -143,7 +142,7 @@ class NewtonCotes(object):
         y4 = self.numeric_f(b)
         return h * (7.0 * (y0 + y4) + 32.0 * (y1 + y3) + 12.0 * y2) * 2.0 / 45.0
 
-    def _fifthOrder(self, a: float, b: float) -> float:
+    def _fifth_order(self, a: float, b: float) -> float:
         h = (b - a) / 5.0
         y0 = self.numeric_f(a)
         y1 = self.numeric_f(a + h)
@@ -153,7 +152,7 @@ class NewtonCotes(object):
         y5 = self.numeric_f(b)
         return h * (19.0 * (y0 + y5) + 75.0 * (y1 + y4) + 50.0 * (y2 + y3)) * 5.0 / 288.0
 
-    def _sixthOrder(self, a: float, b: float) -> float:
+    def _sixth_order(self, a: float, b: float) -> float:
         h = (b - a) / 6.0
         y0 = self.numeric_f(a)
         y1 = self.numeric_f(a + h)
@@ -164,7 +163,7 @@ class NewtonCotes(object):
         y6 = self.numeric_f(b)
         return h * (41.0 * (y0 + y6) + 216.0 * (y1 + y5) + 27.0 * (y2 + y4) + 272.0 * y3) / 140.0
 
-    def _seventhOrder(self, a: float, b: float) -> float:
+    def _seventh_order(self, a: float, b: float) -> float:
         h = (b - a) / 7.0
         y0 = self.numeric_f(a)
         y1 = self.numeric_f(a + h)
@@ -189,7 +188,7 @@ class CompositeNewtonCotes(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
-    def __call__(self, a: float, b: float, m: int) -> Tuple[float, float, float, float, float]:
+    def __call__(self, a: float, b: float, m: int) -> tuple[float, float, float, float, float]:
         """
         Evaluate the composite Newton-Cotes methods on the interval [a, b], which is divided into m intervals.
 
@@ -199,7 +198,7 @@ class CompositeNewtonCotes(object):
             m (int): The number of subintervals.
 
         Returns:
-            Tuple[float, float, float, float, float]: 
+            tuple[float, float, float, float, float]: 
                 The results of the composite Newton-Cotes methods, in the order of trapezoid, midpoint, 3 midpoints, Simpson's, and the exact result.
         """
 
@@ -210,7 +209,7 @@ class CompositeNewtonCotes(object):
         return (
             self._trapezoid(a, b, m),
             self._midpoint(a, b, m),
-            self._threeMidpoints(a, b, m),
+            self._three_midpoints(a, b, m),
             self._simpson(a, b, m),
             sp.integrate(self.symbol_f, (self.x, a, b)),
         )
@@ -230,7 +229,7 @@ class CompositeNewtonCotes(object):
         y = self.numeric_f(x)
         return np.sum(y) * (b - a) / m
 
-    def _threeMidpoints(self, a: float, b: float, m: int) -> float:
+    def _three_midpoints(self, a: float, b: float, m: int) -> float:
         """Composite Three Midpoints Rule."""
         h = (b - a) / m
         x = np.linspace(a, b, 4 * m + 1)
@@ -258,7 +257,7 @@ class Romberg(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
-    def __call__(self, a: float, b: float, m: int) -> Tuple[list[list[float]], float]:
+    def __call__(self, a: float, b: float, m: int) -> tuple[list[list[float]], float]:
         """
         Evaluate the m order Romberg methods on the interval [a, b].
 
@@ -268,7 +267,7 @@ class Romberg(object):
             m (int): The number of lines.
 
         Returns:
-            Tuple[list[list[float]], float]: The results of all the m order Romberg method results and the exact result.
+            tuple[list[list[float]], float]: The results of all the m order Romberg method results and the exact result.
         """
 
         assert not (math.isinf(a) or math.isnan(a)), "Invalid interval."
@@ -321,7 +320,7 @@ class GaussLegendre(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
-    def __call__(self, a: float, b: float) -> Tuple[float, float, float, float, float]:
+    def __call__(self, a: float, b: float) -> tuple[float, float, float, float, float]:
         """
         Evaluate the Gauss-Legendre methods on the interval [a, b].
 
@@ -330,7 +329,7 @@ class GaussLegendre(object):
             b (float): The upper bound of the interval.
 
         Returns:
-            Tuple[float, float, float, float, float]: 
+            tuple[float, float, float, float, float]: 
                 The results of the first 4 order Gauss-Legendre methods and the exact result.
         """
 
@@ -366,7 +365,7 @@ class GaussChebyshev(object):
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
-    def __call__(self, a: float, b: float) -> Tuple[float, float, float, float, float]:
+    def __call__(self, a: float, b: float) -> tuple[float, float, float, float, float]:
         """
         Evaluate the Gauss-Chebyshev methods on the interval [a, b].
 
@@ -375,7 +374,7 @@ class GaussChebyshev(object):
             b (float): The upper bound of the interval.
 
         Returns:
-            Tuple[float, float, float, float, float]: 
+            tuple[float, float, float, float, float]: 
                 The results of the first 4 order Gauss-Chebyshev methods and the exact result.
         """
 
@@ -397,4 +396,3 @@ class GaussChebyshev(object):
             root = 0.5 * ((b - a) * math.cos((2 * i - 1) / (2 * (order + 1)) * math.pi) + b + a)
             result += self.numeric_f(root) * (b - a) * 0.5
         return result
-
