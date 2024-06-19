@@ -4,7 +4,6 @@ import sys
 import pytest
 import numpy as np
 import sympy as sp
-import sympy.abc
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -12,7 +11,7 @@ import numana.chapter4 as ch4
 
 class TestLeastSquare(object):
     def setup_method(self):
-        self.x = sympy.abc.x
+        self.x = sp.symbols('x')
 
     def output_least_square(self, A: np.ndarray, b: np.ndarray):
         x, err = ch4.LeastSquare.solve(A, b)

@@ -1,16 +1,16 @@
 import numpy as np
 import sympy as sp
-import sympy.abc
 
 class Solver(object):
     epsilon: float = np.finfo(float).eps
 
     def __init__(self, f: sp.Function):
+        self.x = sp.symbols("x")
         self.symbol_f = f
-        self.numeric_f = sp.lambdify(sympy.abc.x, f, "numpy")
+        self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
     def symbolic(self) -> list:
-        return sp.solve(self.symbol_f, sympy.abc.x)
+        return sp.solve(self.symbol_f, self.x)
 
     def bisection(self, a: float, b: float) -> float:
         """
@@ -77,7 +77,7 @@ class Solver(object):
 
         a, b = np.asarray(a), np.asarray(a)
         tolerance = 2.0 * self.epsilon * max(1.0, abs(a))
-        df = sp.lambdify(sympy.abc.x, sp.diff(self.symbol_f), "numpy")
+        df = sp.lambdify(self.x, sp.diff(self.symbol_f), "numpy")
 
         a, b = b, b - self.numeric_f(b) / df(b)
         while abs(b - a) > tolerance:

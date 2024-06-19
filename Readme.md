@@ -5,7 +5,7 @@ Code for Numerical Analysis.
 ## Setup
 
 ```bash
-conda install -c conda-forge numpy pytest sympy
+conda install -c conda-forge matplotlib numpy pytest rich sympy
 ```
 
 ## Check List

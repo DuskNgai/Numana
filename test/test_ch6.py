@@ -3,7 +3,6 @@ import sys
 
 import pytest
 import sympy as sp
-import sympy.abc
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -16,8 +15,8 @@ class TestExplicitEuler(object):
         print(result)
 
     def test_explicit_euler(self):
-        x = sympy.abc.x
-        y = sympy.abc.y
+        x = sp.symbols('x')
+        y = sp.symbols('y')
 
         self.output_explicit_euler(x * y + x ** 3, 1.0, 5, 0.0, 1.0)
 
@@ -27,8 +26,8 @@ class TestExplicitEuler(object):
         print(result)
 
     def test_trapezoid_euler(self):
-        x = sympy.abc.x
-        y = sympy.abc.y
+        x = sp.symbols('x')
+        y = sp.symbols('y')
 
         self.output_trapezoid_euler(x * y + x ** 3, 1.0, 10, 0.0, 1.0)
 

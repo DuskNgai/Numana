@@ -5,7 +5,6 @@ import sys
 import numpy as np
 import pytest
 import sympy as sp
-import sympy.abc
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -13,7 +12,7 @@ import numana.chapter0 as ch0
 
 class TestHornerEval(object):
     def setup(self):
-        self.x = sympy.abc.x
+        self.x = sp.symbols('x')
 
     def output_horner_eval(self,
         x: float | list[float],

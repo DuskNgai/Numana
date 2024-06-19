@@ -2,7 +2,6 @@ import math
 
 import numpy as np
 import sympy as sp
-import sympy.abc
 
 class NumericalDifferentiation(object):
     """
@@ -13,7 +12,7 @@ class NumericalDifferentiation(object):
     """
 
     def __init__(self, f: sp.Function):
-        self.x = sympy.abc.x
+        self.x = sp.symbols('x')
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
@@ -77,7 +76,7 @@ class NewtonCotes(object):
     """
 
     def __init__(self, f: sp.Function):
-        self.x = sympy.abc.x
+        self.x = sp.symbols('x')
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
@@ -184,7 +183,7 @@ class CompositeNewtonCotes(object):
     """
 
     def __init__(self, f: sp.Function):
-        self.x = sympy.abc.x
+        self.x = sp.symbols('x')
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
@@ -253,7 +252,7 @@ class Romberg(object):
     """
 
     def __init__(self, f: sp.Function):
-        self.x = sympy.abc.x
+        self.x = sp.symbols('x')
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
@@ -316,7 +315,7 @@ class GaussLegendre(object):
     )
 
     def __init__(self, f: sp.Function):
-        self.x = sympy.abc.x
+        self.x = sp.symbols('x')
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 
@@ -361,7 +360,7 @@ class GaussChebyshev(object):
     """
 
     def __init__(self, f: sp.Function):
-        self.x = sympy.abc.x
+        self.x = sp.symbols('x')
         self.symbol_f = f
         self.numeric_f = sp.lambdify(self.x, f, "numpy")
 

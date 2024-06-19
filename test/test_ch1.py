@@ -3,7 +3,6 @@ import sys
 
 import pytest
 import sympy as sp
-import sympy.abc
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -17,7 +16,7 @@ class TestBisection(object):
         print("The result is: \033\13334m[{}]\033\1330m.".format(result))
 
     def test_bisection(self) -> None:
-        x = sympy.abc.x
+        x = sp.symbols('x')
 
         self.output_bisection(x ** 3 + x - 1, 0.0, 1.0)
         self.output_bisection(sp.cos(x) - x, 0.0, 1.0)
@@ -59,7 +58,7 @@ class TestFixedPointIteration(object):
         print("The result is: \033\13334m[{}]\033\1330m.".format(result))
 
     def test_fixed_point_iteration(self) -> None:
-        x = sympy.abc.x
+        x = sp.symbols('x')
 
         self.output_fixed_point_iteration(1 - x ** 3, 0.5)
         self.output_fixed_point_iteration((1 - x) ** (1 / 3), 0.5)
@@ -93,7 +92,7 @@ class TestNewton(object):
         print("The result is: \033\13334m[{}]\033\1330m.".format(result))
 
     def test_newton(self):
-        x = sympy.abc.x
+        x = sp.symbols('x')
 
         # (1)
         self.output_newton(x ** 3 + x - 2, 0.0)
@@ -126,7 +125,7 @@ class TestSecant(object):
         print("The result is: \033\13334m[{}]\033\1330m.".format(result))
 
     def test_secant(self) -> None:
-        x = sympy.abc.x
+        x = sp.symbols('x')
 
         self.output_secant(x ** 3 + x - 1, 0.0, 1.0)
         self.output_secant(x ** 3 - 2 * x - 2, 1.0, 2.0)
@@ -141,7 +140,7 @@ class TestRegulaFalsi(object):
         print("The result is: \033\13334m[{}]\033\1330m.".format(result))
 
     def test_regula_falsi(self) -> None:
-        x = sympy.abc.x
+        x = sp.symbols('x')
 
         self.output_regula_falsi(x ** 3 - 2 * x - 2, 1.0, 2.0)
         self.output_regula_falsi(sp.exp(x) + x - 7, 1.0, 2.0)
@@ -155,7 +154,7 @@ class TestInverseInterpolation(object):
         print("The result is: \033\13334m[{}]\033\1330m.".format(result))
 
     def test_inverse_interpolation(self) -> None:
-        x = sympy.abc.x
+        x = sp.symbols('x')
 
         self.output_inverse_interpolation(x ** 3 - 2 * x - 2, 1.0, 2.0, 0.0)
         self.output_inverse_interpolation(sp.exp(x) + x - 7, 1.0, 2.0, 0.0)

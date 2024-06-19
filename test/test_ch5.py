@@ -4,7 +4,6 @@ import sys
 
 import pytest
 import sympy as sp
-import sympy.abc
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
@@ -24,7 +23,7 @@ class TestNumericalDifferentiation(object):
         print("Using symbolic differentiation formula for second-order derivative,         the result is: \033\13334m[{}]\033\1330m.".format(result[6]))
 
     def test_numerical_differentiation(self):
-        x = sympy.abc.x
+        x = sp.symbols('x')
         self.output_numerical_differentiation(1.0 / x, 2.0, 0.1)
         # (1)
         self.output_numerical_differentiation(sp.log(x), 1.0, 1e-1)
@@ -52,7 +51,7 @@ class TestNewtonCotes(object):
         print("Using symbolic integration formula, the result is: \033\13334m[{}]\033\1330m.".format(result[-1]))
 
     def test_newton_cotes(self):
-        x = sympy.abc.x
+        x = sp.symbols('x')
         self.output_newton_cotes(sp.log(x), 1.0, 2.0)
         self.output_newton_cotes(x ** 2,    0.0, 1.0)
         self.output_newton_cotes(sp.cos(x), 0.0, math.pi / 2.0)
@@ -70,7 +69,7 @@ class TestCompositeNewtonCotes(object):
         print("Using symbolic integration,                                the result is: \033\13334m[{}]\033\1330m.".format(result[-1]))
 
     def test_composite_newton_cotes(self):
-        x = sympy.abc.x
+        x = sp.symbols('x')
         self.output_composite_newton_cotes(sp.log(x), 1.0, 2.0, 4)
         self.output_composite_newton_cotes(sp.sin(x) / x, 0.0, 1.0, 4)
         # (1), (2), (3)
@@ -117,7 +116,7 @@ class TestRomberg(object):
         print("Using symbolic integration, the result is: \033\13334m[{}]\033\1330m.".format(result[-1]))
 
     def test_romberg(self):
-        x = sympy.abc.x
+        x = sp.symbols('x')
         self.output_romberg(sp.log(x), 1.0, 2.0, 4)
         # (1)
         self.output_romberg(x ** 2, 0.0, 1.0, 3)
@@ -147,7 +146,7 @@ class TestGaussLegendre(object):
         print("Using symbolic integration, the result is: \033\13334m[{}]\033\1330m.".format(result[-1]))
 
     def test_gauss_legendre(self):
-        x = sympy.abc.x
+        x = sp.symbols('x')
         self.output_gauss_legendre(sp.exp(-x ** 2 / 2), -1.0, 1.0)
         self.output_gauss_legendre(sp.log(x), 1.0, 2.0)
         # (1) (2) (3)
